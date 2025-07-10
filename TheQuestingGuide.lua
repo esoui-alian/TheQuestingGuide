@@ -16,7 +16,8 @@ local function CreateClassicScene()
     TQG_CLASSIC_SCENE:AddFragment(FRAME_EMOTE_FRAGMENT_JOURNAL)
     TQG_CLASSIC_SCENE:AddFragment(RIGHT_BG_FRAGMENT)
 
-    TQG_CLASSIC_FRAGMENT = ZO_HUDFadeSceneFragment:New(TheQuestingGuideClassic_Top)
+    TQG_CLASSIC_FRAGMENT = ZO_HUDFadeSceneFragment:New(
+                               TheQuestingGuideClassic_Top)
     TQG_CLASSIC_SCENE:AddFragment(TQG_CLASSIC_FRAGMENT)
 
     -- cadwellsAlmanacScene:AddFragment(ZO_TutorialTriggerFragment:New(
@@ -34,3 +35,5 @@ local function addonLoaded(event, addonName)
 end
 EVENT_MANAGER:RegisterForEvent("TheQuestingGuide", EVENT_ADD_ON_LOADED,
                                addonLoaded)
+
+function TQG.ToggleMenu() SCENE_MANAGER:Show("TheQuestingGuideClassic") end

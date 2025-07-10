@@ -2,7 +2,7 @@
     <Layer name="SI_KEYBINDINGS_LAYER_GENERAL" allowFallthrough="false">
         <Category name="The Questing Guide">
             <Action name="TQG_OPEN_KEY">
-                <Down>TQG:ToggleMenu()</Down>
+                <Down>TheQuestingGuide.ToggleMenu()</Down>
                 <Up></Up>
             </Action>
         </Category>

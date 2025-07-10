@@ -19,23 +19,26 @@ function TQG_Manager:New(control)
                                     "TheQuestingGuideClassic_ObjectiveLine",
                                     control, "Objective")
 
-    manager.currentCadwellCategory = GetCadwellProgressionLevel() -- GetCurrentCategory(tab)
+    manager.currentCadwellCategory = TQG.GetNumCategories(tab)
 
     manager:InitializeCategoryList(control)
     manager:RefreshList()
 
-    local function OnCadwellCategoryChanged(event, cadwellProgression)
+    --[[local function OnCadwellCategoryChanged(event, cadwellProgression)
         MAIN_MENU_KEYBOARD:UpdateSceneGroupButtons("journalSceneGroup")
         manager.currentCadwellCategory = cadwellProgression
         manager:RefreshList()
-    end
+    end]]
 
-    local function OnPOIUpdated()
+    --[[local function OnPOIUpdated()
         if manager.currentCadwellCategory > CADWELL_PROGRESSION_LEVEL_BRONZE then
             manager:RefreshList()
         end
-    end
+    end]]
 
+    local function RefreshQuestStates(event) manager:RefreshList() end
+
+    control:RegisterForEvent(EVENT_QUEST_REMOVED, RefreshQuestStates)
     -- control:RegisterForEvent(EVENT_POI_UPDATED, OnPOIUpdated)
     -- control:RegisterForEvent(EVENT_CADWELL_PROGRESSION_LEVEL_CHANGED,
     --                         OnCadwellCategoryChanged)
@@ -115,15 +118,9 @@ function TQG_Manager:RefreshList()
                 local zoneCompleted = true
 
                 local objectives = {}
-
-                local numObjectives = TQG.GetNumObjectivesForCategoryAndZone(
-                                          tab, category, zoneIndex)
-                for objectiveIndex = 1, numObjectives do
-                    local name, openingText, closingText, objectiveOrder,
-                          discovered, completed =
-                        TQG.GetObjectiveInfoForCategoryAndZone(tab, category,
-                                                               zoneIndex,
-                                                               objectiveIndex)
+                local function AddObjective(name, openingText, closingText,
+                                            objectiveOrder, discovered,
+                                            completed)
                     zoneCompleted = zoneCompleted and completed
                     table.insert(objectives, {
                         name = name,
@@ -133,6 +130,45 @@ function TQG_Manager:RefreshList()
                         discovered = discovered,
                         completed = completed
                     })
+                end
+
+                local hasZoneStoryQuests, numZoneStoryQuests =
+                    TQG.DoesZoneHaveStoryQuests(tab, category, zoneIndex)
+
+                if hasZoneStoryQuests then
+                    for objectiveIndex = 1, numZoneStoryQuests do
+                        local name, openingText, closingText, objectiveOrder,
+                              discovered, completed =
+                            TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab,
+                                                                        category,
+                                                                        zoneIndex,
+                                                                        objectiveIndex)
+
+                        AddObjective(name, openingText, closingText,
+                                     objectiveOrder, discovered, completed)
+                    end
+                else
+                    local numObjectives =
+                        TQG.GetNumObjectivesForCategoryAndZone(tab, category,
+                                                               zoneIndex)
+
+                    local name, openingText, closingText, objectiveOrder,
+                          discovered, completed =
+                        TQG.GetObjectiveInfoForCategoryAndZone(tab, category,
+                                                               zoneIndex,
+                                                               objectiveIndex)
+
+                    for objectiveIndex = 1, numObjectives do
+                        local name, openingText, closingText, objectiveOrder,
+                              discovered, completed =
+                            TQG.GetObjectiveInfoForCategoryAndZone(tab,
+                                                                   category,
+                                                                   zoneIndex,
+                                                                   objectiveIndex)
+
+                        AddObjective(name, openingText, closingText,
+                                     objectiveOrder, discovered, completed)
+                    end
                 end
 
                 table.sort(objectives, ZO_CadwellSort)
@@ -232,8 +268,3 @@ function TheQuestingGuideClassic_OnShown() QUESTINGGUIDE_CLASSIC:OnShown() end
 function TheQuestingGuideClassic_Initialize(control)
     QUESTINGGUIDE_CLASSIC = TQG_Manager:New(control)
 end
-
-local function RefreshQuestStates(event) QUESTINGGUIDE_CLASSIC:RefreshList() end
-
-EVENT_MANAGER:RegisterForEvent("TheQuestingGuide_Classic", EVENT_QUEST_REMOVED,
-                               RefreshQuestStates)

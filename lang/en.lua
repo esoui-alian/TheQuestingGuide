@@ -57,28 +57,35 @@ local getZoneDescriptionById = GetZoneDescriptionById
 TQG.Zones = {
     ["CLASSIC"] = {
         [1] = {
-            [1] = {
-                name = getZoneNameById(586),
-                desc = getZoneDescriptionById(586)
-            },
-            [2] = {
-                name = getZoneNameById(1429),
-                desc = getZoneDescriptionById(1429)
-            },
-            [3] = {
-                name = getZoneNameById(200),
-                desc = getZoneDescriptionById(200)
-            }
+            [1] = {zoneId = 586},
+            [2] = {zoneId = 1429},
+            [3] = {zoneId = 200}
         },
         [2] = {
-            [1] = {
-                name = getZoneNameById(537),
-                desc = getZoneDescriptionById(537)
-            },
-            [2] = {
-                name = getZoneNameById(381),
-                desc = getZoneDescriptionById(381)
-            }
+            [1] = {zoneId = 537},
+            [2] = {zoneId = 381},
+            [3] = {zoneId = 383},
+            [4] = {zoneId = 108},
+            [5] = {zoneId = 058},
+            [6] = {zoneId = 382}
+        },
+        [3] = {
+            [1] = {zoneId = 534},
+            [2] = {zoneId = 535},
+            [3] = {zoneId = 003},
+            [4] = {zoneId = 019},
+            [5] = {zoneId = 020},
+            [6] = {zoneId = 104},
+            [7] = {zoneId = 092}
+        },
+        [4] = {
+            [1] = {zoneId = 280},
+            [2] = {zoneId = 281},
+            [3] = {zoneId = 041},
+            [4] = {zoneId = 057},
+            [5] = {zoneId = 117},
+            [6] = {zoneId = 101},
+            [7] = {zoneId = 103}
         }
     }
 }
@@ -88,43 +95,35 @@ local getQuestName = getQuestName
 TQG.Objectives = {
     ["CLASSIC"] = {
         [1] = {
-            [1] = {
-                [1] = {
-                    openingText = "Open Objective 1",
-                    closingText = "Close Objective 1",
-                    questId = 4296
-                }
-            },
-            [2] = {
-                [1] = {
-                    openingText = "Open Objective 2",
-                    closingText = "Close Objective 2",
-                    questId = 4831
-                }
-            },
-            [3] = {
-                [1] = {
-                    openingText = "Open Objective 3",
-                    closingText = "Close Objective 3",
-                    questId = 4474
-                }
-            }
+            [1] = {[1] = {openingText = "", closingText = "", questId = 4296}},
+            [2] = {[1] = {openingText = "", closingText = "", questId = 4831}},
+            [3] = {[1] = {openingText = "", closingText = "", questId = 4474}}
         },
         [2] = {
-            [1] = {
-                [1] = {
-                    openingText = "Open Objective A",
-                    closingText = "Close Objective A",
-                    questId = 0
-                }
-            },
-            [2] = {
-                [1] = {
-                    openingText = "Open Objective B",
-                    closingText = "Close Objective B",
-                    questId = 0
-                }
-            }
+            [1] = {[1] = {questId = 0}},
+            [2] = {[1] = {questId = 0}},
+            [3] = {[1] = {questId = 0}},
+            [4] = {[1] = {questId = 0}},
+            [5] = {[1] = {questId = 0}},
+            [6] = {[1] = {questId = 0}}
+        },
+        [3] = {
+            [1] = {[1] = {questId = 0}},
+            [2] = {[1] = {questId = 0}},
+            [3] = {[1] = {questId = 0}},
+            [4] = {[1] = {questId = 0}},
+            [5] = {[1] = {questId = 0}},
+            [6] = {[1] = {questId = 0}},
+            [7] = {[1] = {questId = 0}}
+        },
+        [4] = {
+            [1] = {[1] = {questId = 0}},
+            [2] = {[1] = {questId = 0}},
+            [3] = {[1] = {questId = 0}},
+            [4] = {[1] = {questId = 0}},
+            [5] = {[1] = {questId = 0}},
+            [6] = {[1] = {questId = 0}},
+            [7] = {[1] = {questId = 0}}
         }
     }
 }
