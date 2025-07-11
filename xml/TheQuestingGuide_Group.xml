@@ -1,30 +1,27 @@
 <GuiXml>
     <Controls>
-        <TopLevelControl name="TheQuestingGuideClassic_BG" inherits="ZO_RightFootPrintBackground"
-            hidden="true" layer="BACKGROUND" level="1" />
-
-        <Control name="TheQuestingGuideClassic_ZoneDetailControl" virtual="true">
+        <Control name="TheQuestingGuideGroup_ZoneDetailControl" virtual="true">
             <OnInitialized>
                 local scrollChild = GetControl(self:GetParent(),"ZoneInfoContainerScrollChild")
                 self:SetParent(scrollChild)
             </OnInitialized>
         </Control>
 
-        <Control name="TheQuestingGuideClassic_ZoneStepControl" virtual="true">
+        <Control name="TheQuestingGuideGroup_ZoneStepControl" virtual="true">
             <OnInitialized>
                 local scrollChild = GetControl(self:GetParent(),"ZoneStepContainerScrollChild")
                 self:SetParent(scrollChild)
             </OnInitialized>
         </Control>
 
-        <Label name="TheQuestingGuideClassic_DetailText" inherits="ZO_Cadwell_ZoneDetailControl"
+        <Label name="TheQuestingGuideGroup_DetailText" inherits="ZO_Cadwell_ZoneDetailControl"
             font="ZoFontWinH4" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL"
             virtual="true" />
-        <Label name="TheQuestingGuideClassic_StepText" inherits="ZO_Cadwell_ZoneStepControl"
+        <Label name="TheQuestingGuideGroup_StepText" inherits="ZO_Cadwell_ZoneStepControl"
             font="ZoFontWinH4" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL"
             virtual="true" />
 
-        <Label name="TheQuestingGuideClassic_ObjectiveLine" inherits="ZO_Cadwell_StepText"
+        <Label name="TheQuestingGuideGroup_ObjectiveLine" inherits="ZO_Cadwell_StepText"
             virtual="true">
             <Dimensions x="475" />
             <Controls>
@@ -35,13 +32,13 @@
             </Controls>
         </Label>
 
-        <TopLevelControl name="TheQuestingGuideClassic_Top" inherits="ZO_RightPanelFootPrint"
+        <TopLevelControl name="TheQuestingGuideGroup_Top" inherits="ZO_RightPanelFootPrint"
             hidden="true">
             <OnInitialized>
-                TheQuestingGuideClassic_Initialize(self)
+                TheQuestingGuideGroup_Initialize(self, "GROUP", "TheQuestingGuideGroup_ObjectiveLine")
             </OnInitialized>
             <OnEffectivelyShown>
-                TheQuestingGuideClassic_OnShown()
+                TheQuestingGuideGroup_OnShown()
             </OnEffectivelyShown>
             <Controls>
                 <Control name="$(parent)NavigationContainer" inherits="ZO_ScrollContainer">

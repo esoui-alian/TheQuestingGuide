@@ -17,13 +17,11 @@ local getZoneStoryActivityNameByActivityIndex =
     GetZoneStoryActivityNameByActivityIndex
 local isZoneStoryActivityComplete = IsZoneStoryActivityComplete
 
-function TQG.GetCurrentCategory(tab) return "CLASSIC" end
-
 function TQG.GetNumCategories(tab) return #catData[tab] end
 
 function TQG.GetIconsForCategory(tab, category)
     if not (catData[tab] and catData[tab][category]) then
-        CR:AddSystemMessage("no icons")
+        -- CR:AddSystemMessage("no catData")
         return "", "", ""
     end
 
@@ -36,20 +34,21 @@ end
 function TQG.GetZoneInfo(tab, category, zone)
     if not (zoneData[tab] and zoneData[tab][category] and
         zoneData[tab][category][zone]) then
-        CR:AddSystemMessage("no zoneInfo")
+        -- CR:AddSystemMessage("no zoneData")
         return "", "", 0
     end
 
     local zoneId = zoneData[tab][category][zone].zoneId
     local zoneCounter = zone
-    local zoneName = getZoneNameById(zoneId) or "Unknown Zone"
+    local zoneName = zoneData[tab][category][zone].zoneName or
+                         getZoneNameById(zoneId) or "Unknown Zone"
     local zoneDeescription = getZoneDescriptionById(zoneId) or "No Description"
     return zoneName, zoneDeescription, zoneCounter
 end
 
 function TQG.GetNumZonesForCategory(tab, category)
     if not (zoneData[tab] and zoneData[tab][category]) then
-        CR:AddSystemMessage("no numZones")
+        -- CR:AddSystemMessage("no zoneData")
         return 0
     end
     return #zoneData[tab][category]
@@ -58,7 +57,7 @@ end
 function TQG.GetNumObjectivesForCategoryAndZone(tab, category, zone)
     if not (objData[tab] and objData[tab][category] and
         objData[tab][category][zone]) then
-        CR:AddSystemMessage("no numObjectives")
+        -- CR:AddSystemMessage("no objData")
         return 0
     end
     return #objData[tab][category][zone]
@@ -73,21 +72,69 @@ local function IsQuestinJournal(questName)
     end
 end
 
-local function GetObjectiveInfo(questId)
+local function GetUESPLocationInfo(questId, questName, isOpeningText,
+                                   isClosingText)
+    if not LibUespQuestData then return end
+
+    if questId then
+        if isOpeningText then
+            local zoneName, objectiveName =
+                LibUespQuestData:GetUespQuestLocationInfo(questId)
+            return (objectiveName ~= "" and objectiveName) or
+                       (zoneName ~= "" and zoneName)
+        elseif isClosingText then
+            return LibUespQuestData:GetUespQuestBackgroundText(questId)
+        end
+    end
+
+    if questName then
+        local zoneName, objectiveName
+
+        for questId, questData in pairs(LibUespQuestData.quests) do
+            if getQuestName(questId) == questName then
+                if isOpeningText then
+                    zoneName, objectiveName =
+                        LibUespQuestData:GetUespQuestLocationInfo(questId)
+                    return (objectiveName ~= "" and objectiveName) or zoneName
+                elseif isClosingText then
+                    return LibUespQuestData:GetUespQuestBackgroundText(questId)
+                end
+
+                break
+            end
+        end
+    end
+end
+
+local function GetObjectiveInfo(questId, openingText, closingText)
     local questName = getQuestName(questId) ~= "" and getQuestName(questId) or
                           "Unknown Quest"
     local completed = getCompletedQuestInfo(questId) ~= "" or false
     local discovered = completed or IsQuestinJournal(questName)
-    local openingText, closingText = "", ""
+    local zoneName = GetZoneNameById(GetQuestZoneId(questId))
+    local _, objectiveName = GetCompletedQuestLocationInfo(questId)
 
-    return questName, openingText, closingText, completed,
-           discovered
+    local openingUESP = GetUESPLocationInfo(questId, _, true)
+    local openingText = openingText or openingUESP or ""
+
+    local closingUESP = GetUESPLocationInfo(questId, _, false, true)
+    local closingText = closingText or closingUESP or ""
+
+    if openingText == "" then
+        openingText = (zoneName ~= "" and zoneName) or "No Opening Text"
+    end
+    if closingText == "" then
+        closingText = (objectiveName ~= "" and objectiveName) or
+                          (zoneName ~= "" and zoneName) or "No Closing Text"
+    end
+
+    return questName, openingText, closingText, completed, discovered
 end
 
 function TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category, zone,
                                                      objective)
     if not (zoneData[tab] and zoneData[tab][category]) then
-        CR:AddSystemMessage("no zoneInfo (Stories)")
+        -- CR:AddSystemMessage("no zoneData")
         return
     end
 
@@ -96,23 +143,36 @@ function TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category, zone,
                                                               ZONE_COMPLETION_TYPE_PRIORITY_QUESTS,
                                                               objective)
     local completed = isZoneStoryActivityComplete(zoneId,
-                                                    ZONE_COMPLETION_TYPE_PRIORITY_QUESTS,
-                                                    objective)
+                                                  ZONE_COMPLETION_TYPE_PRIORITY_QUESTS,
+                                                  objective)
     local discovered = completed or IsQuestinJournal(questName)
-    local openingText, closingText = "", ""
+
+    local openingText = GetUESPLocationInfo(_, questName, true) or ""
+    local closingText = GetUESPLocationInfo(_, questName, false, true) or ""
 
     if openingText == "" then openingText = "No Opening Text" end
-
     if closingText == "" then closingText = "No Closing Text" end
+    local optional = false
 
-    return questName, openingText, closingText, objectiveOrder, discovered,
-           completed
+    return questName, openingText, closingText, objective, discovered,
+           completed, optional
+end
+
+function TQG.DoesZoneHavePrologue(tab, category, zone)
+    if not (zoneData[tab] and zoneData[tab][category] and
+        zoneData[tab][category][zone]) then
+        -- CR:AddSystemMessage("no zoneData")
+        return
+    end
+
+    return zoneData[tab][category][zone].hasPrologue,
+           zoneData[tab][category][zone].numPrologueQuests or 0
 end
 
 function TQG.DoesZoneHaveStoryQuests(tab, category, zone)
     if not (zoneData[tab] and zoneData[tab][category] and
         zoneData[tab][category][zone]) then
-        CR:AddSystemMessage("no ZoneStories")
+        -- CR:AddSystemMessage("no zoneData")
         return
     end
 
@@ -121,7 +181,7 @@ function TQG.DoesZoneHaveStoryQuests(tab, category, zone)
         GetNumZoneActivitiesForZoneCompletionType(zoneId,
                                                   ZONE_COMPLETION_TYPE_PRIORITY_QUESTS)
     if numZoneActivitiesForZoneCompletionType < 1 then
-        CR:AddSystemMessage("no ZoneActivities")
+        -- CR:AddSystemMessage("no ZoneActivities")
         return
     end
 
@@ -131,27 +191,22 @@ end
 function TQG.GetObjectiveInfoForCategoryAndZone(tab, category, zone, objective)
     if not (objData[tab] and objData[tab][category] and
         objData[tab][category][zone] and objData[tab][category][zone][objective]) then
-        CR:AddSystemMessage("no objectiveInfo")
+        -- CR:AddSystemMessage("no objData")
         return
     end
 
-    local objectiveData = TQG.Objectives[tab][category][zone][objective]
+    local objectiveData = objData[tab][category][zone][objective]
 
-    local objectiveCounter = objective
     local questId = objectiveData.questId
-    local questName, openingText, closingText, discovered,
-          completed = GetObjectiveInfo(questId)
+    local openingText = objectiveData.openingText
+    local closingText = objectiveData.closingText
 
-    if openingText == "" then
-        openingText = objectiveData.openingText ~= "" and
-                          objectiveData.openingText or "No Opening Text"
-    end
+    local questName, openingText, closingText, discovered, completed =
+        GetObjectiveInfo(questId, openingText, closingText)
 
-    if closingText == "" then
-        closingText = objectiveData.closingText ~= "" and
-                          objectiveData.closingText or "No Closing Text"
-    end
+    local optional = objData[tab][category][zone][objective].optional
+    local prologue = objData[tab][category][zone][objective].prologue
 
-    return questName, openingText, closingText, objectiveCounter, discovered,
-           completed
+    return questName, openingText, closingText, objective, discovered,
+           completed, optional, prologue
 end

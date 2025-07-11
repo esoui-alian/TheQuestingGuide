@@ -1,13 +1,13 @@
 local TQG = TheQuestingGuide or {}
-local tab = "CLASSIC"
 
 ---------------------
 -- TQG Manager
 ---------------------
 local TQG_Manager = ZO_Object:Subclass()
 
-function TQG_Manager:New(control)
+function TQG_Manager:New(control, tabInput, objectiveLinePool)
     local manager = ZO_Object.New(self)
+    manager.tab = tabInput
     manager.control = control
 
     manager.zoneInfoContainer = control:GetNamedChild("ZoneInfoContainer")
@@ -19,7 +19,7 @@ function TQG_Manager:New(control)
                                     "TheQuestingGuideClassic_ObjectiveLine",
                                     control, "Objective")
 
-    manager.currentCadwellCategory = TQG.GetNumCategories(tab)
+    manager.currentCadwellCategory = TQG.GetNumCategories(manager.tab)
 
     manager:InitializeCategoryList(control)
     manager:RefreshList()
@@ -52,13 +52,13 @@ function TQG_Manager:InitializeCategoryList(control)
                                       -10, 300)
 
     local function GetIconsForQuestingGuideCategoryy(category)
-        return TQG.GetIconsForCategory(tab, category)
+        return TQG.GetIconsForCategory(self.tab, category)
     end
 
     local function TreeHeaderSetup(node, control, category, open)
         control.category = category
         control.text:SetModifyTextType(MODIFY_TEXT_TYPE_UPPERCASE)
-        control.text:SetText(TQG.Categories[tab][category].name)
+        control.text:SetText(TQG.Categories[self.tab][category].name)
         local down, up, over = GetIconsForQuestingGuideCategoryy(category)
 
         control.icon:SetTexture(open and down or up)
@@ -102,8 +102,8 @@ function TQG_Manager:RefreshList()
 
     local zones = {}
 
-    for category = 1, TQG.GetNumCategories(tab) do
-        local numZones = TQG.GetNumZonesForCategory(tab, category)
+    for category = 1, TQG.GetNumCategories(self.tab) do
+        local numZones = TQG.GetNumZonesForCategory(self.tab, category)
         if self.currentCadwellCategory < category then break end
 
         if numZones > 0 then
@@ -112,7 +112,7 @@ function TQG_Manager:RefreshList()
 
             for zoneIndex = 1, numZones do
                 local zoneName, zoneDescription, zoneOrder = TQG.GetZoneInfo(
-                                                                 tab, category,
+                                                                 self.tab, category,
                                                                  zoneIndex)
 
                 local zoneCompleted = true
@@ -120,8 +120,9 @@ function TQG_Manager:RefreshList()
                 local objectives = {}
                 local function AddObjective(name, openingText, closingText,
                                             objectiveOrder, discovered,
-                                            completed)
-                    zoneCompleted = zoneCompleted and completed
+                                            completed, optional)
+                    zoneCompleted = zoneCompleted and (completed or optional)
+
                     table.insert(objectives, {
                         name = name,
                         openingText = openingText,
@@ -132,42 +133,67 @@ function TQG_Manager:RefreshList()
                     })
                 end
 
+                local hasPrologue, numPrologueQuests =
+                    TQG.DoesZoneHavePrologue(self.tab, category, zoneIndex)
+
                 local hasZoneStoryQuests, numZoneStoryQuests =
-                    TQG.DoesZoneHaveStoryQuests(tab, category, zoneIndex)
+                    TQG.DoesZoneHaveStoryQuests(self.tab, category, zoneIndex)
 
                 if hasZoneStoryQuests then
+                    if hasPrologue then
+                        local prologueIndex = 0
+                        repeat
+                            prologueIndex = prologueIndex + 1
+
+                            local name, openingText, closingText,
+                                  objectiveOrder, discovered, completed,
+                                  optional, prologue =
+                                TQG.GetObjectiveInfoForCategoryAndZone(self.tab,
+                                                                       category,
+                                                                       zoneIndex,
+                                                                       prologueIndex)
+                                                                    
+                            if not prologue then
+                                break
+                            end
+
+                            AddObjective(name, openingText, closingText,
+                                         objectiveOrder, discovered, completed,
+                                         optional)
+                        until not prologue
+                    end
                     for objectiveIndex = 1, numZoneStoryQuests do
                         local name, openingText, closingText, objectiveOrder,
-                              discovered, completed =
-                            TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab,
+                              discovered, completed, optional =
+                            TQG.GetZoneStoryQuestInfoForCategoryAndZone(self.tab,
                                                                         category,
                                                                         zoneIndex,
                                                                         objectiveIndex)
 
+                        local objectiveOrder = objectiveIndex +
+                                                   numPrologueQuests
+
                         AddObjective(name, openingText, closingText,
-                                     objectiveOrder, discovered, completed)
+                                     objectiveOrder, discovered, completed,
+                                     optional)
                     end
                 else
                     local numObjectives =
-                        TQG.GetNumObjectivesForCategoryAndZone(tab, category,
+                        TQG.GetNumObjectivesForCategoryAndZone(self.tab, category,
                                                                zoneIndex)
-
-                    local name, openingText, closingText, objectiveOrder,
-                          discovered, completed =
-                        TQG.GetObjectiveInfoForCategoryAndZone(tab, category,
-                                                               zoneIndex,
-                                                               objectiveIndex)
 
                     for objectiveIndex = 1, numObjectives do
                         local name, openingText, closingText, objectiveOrder,
-                              discovered, completed =
-                            TQG.GetObjectiveInfoForCategoryAndZone(tab,
+                              discovered, completed, optional =
+                            TQG.GetObjectiveInfoForCategoryAndZone(self.tab,
                                                                    category,
                                                                    zoneIndex,
                                                                    objectiveIndex)
+                        local objectiveOrder = objectiveOrder
 
                         AddObjective(name, openingText, closingText,
-                                     objectiveOrder, discovered, completed)
+                                     objectiveOrder, discovered, completed,
+                                     optional)
                     end
                 end
 
@@ -264,7 +290,16 @@ end
 -- XML Handlers
 
 function TheQuestingGuideClassic_OnShown() QUESTINGGUIDE_CLASSIC:OnShown() end
+function TheQuestingGuideClassic_Initialize(control, tabInput, objectiveLinePool)
+    QUESTINGGUIDE_CLASSIC = TQG_Manager:New(control, tabInput, objectiveLinePool)
+end
 
-function TheQuestingGuideClassic_Initialize(control)
-    QUESTINGGUIDE_CLASSIC = TQG_Manager:New(control)
+function TheQuestingGuideDLC_OnShown() QUESTINGGUIDE_DLC:OnShown() end
+function TheQuestingGuideDLC_Initialize(control, tabInput, objectiveLinePool)
+    QUESTINGGUIDE_DLC = TQG_Manager:New(control, tabInput, objectiveLinePool)
+end
+
+function TheQuestingGuideGroup_OnShown() QUESTINGGUIDE_GROUP:OnShown() end
+function TheQuestingGuideGroup_Initialize(control, tabInput, objectiveLinePool)
+    QUESTINGGUIDE_GROUP = TQG_Manager:New(control, tabInput, objectiveLinePool)
 end
