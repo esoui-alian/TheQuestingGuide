@@ -9,9 +9,9 @@ local stringsEN = {
     TQG_MENU_TITLE = "The Questing Guide",
 
     TQG_OVERVIEW_TAB = GetString(SI_CUSTOMER_SERVICE_OVERVIEW), -- "Overview"
-    TQG_CLASSIC_TAB = GetString(SI_HOUSECATEGORYTYPE2), -- "Classic"
-    TQG_DLC_TAB = GetString(SI_COLLECTIBLECATEGORYTYPE1), -- "DLC"
-    TQG_GROUP_TAB = GetString(SI_INSTANCETYPE2), -- "Group"
+    TQG_TAB_CLASSIC = GetString(SI_HOUSECATEGORYTYPE2), -- "Classic"
+    TQG_TAB_DLC = GetString(SI_COLLECTIBLECATEGORYTYPE1), -- "DLC"
+    TQG_TAB_GROUP = GetString(SI_INSTANCETYPE2), -- "Group"
 
     TQG_PROLOGUE = "Prologue",
     TQG_EPILOGUE = "Epilogue",
@@ -37,7 +37,9 @@ local stringsEN = {
     TQG_CHAPTER_HIGH_ISLE = "Legacy of the Bretons",
     TQG_CHAPTER_SHADOW_MORROWIND = "Shadow Over Morrowind",
     TQG_CHAPTER_RECOLLECTION_ITHELIA = "Recollection of Ithelia",
-    TQG_CHAPTER_SEASON_WORM_CULT = "Seasons of the Worm Cult"
+    TQG_CHAPTER_SEASON_WORM_CULT = "Seasons of the Worm Cult",
+    
+    TQG_DUNGEON_DLC_OLD = zStrFmt("<<1>> <<2>>", GetString(SI_PLAYER_MENU_MISC), GetString(SI_COLLECTIBLECATEGORYTYPE1)),
 }
 
 for id, stringVar in pairs(stringsEN) do

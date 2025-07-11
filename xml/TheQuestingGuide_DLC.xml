@@ -35,7 +35,7 @@
         <TopLevelControl name="TheQuestingGuideDLC_Top" inherits="ZO_RightPanelFootPrint"
             hidden="true">
             <OnInitialized>
-                TheQuestingGuideDLC_Initialize(self, "DLC", "TheQuestingGuideDLC_ObjectiveLine")
+                TheQuestingGuideDLC_Initialize(self, GetString(TQG_TAB_DLC), "TheQuestingGuideDLC_ObjectiveLine")
             </OnInitialized>
             <OnEffectivelyShown>
                 TheQuestingGuideDLC_OnShown()

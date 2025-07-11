@@ -35,7 +35,7 @@
         <TopLevelControl name="TheQuestingGuideClassic_Top" inherits="ZO_RightPanelFootPrint"
             hidden="true">
             <OnInitialized>
-                TheQuestingGuideClassic_Initialize(self, "CLASSIC", "TheQuestingGuideClassic_ObjectiveLine")
+                TheQuestingGuideClassic_Initialize(self, GetString(TQG_TAB_CLASSIC), "TheQuestingGuideClassic_ObjectiveLine")
             </OnInitialized>
             <OnEffectivelyShown>
                 TheQuestingGuideClassic_OnShown()

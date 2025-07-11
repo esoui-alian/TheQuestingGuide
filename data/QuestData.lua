@@ -2,7 +2,7 @@ local TQG = TheQuestingGuide
 local strfmt, zStrFmt = string.format, zo_strformat
 
 TQG.Categories = {
-    ["CLASSIC"] = {
+    [GetString(TQG_TAB_CLASSIC)] = {
         [1] = {
             name = GetString(TQG_ARC_PLANEMELD),
             down = "/esoui/art/campaign/campaignbrowser_indexicon_specialevents_down.dds",
@@ -58,7 +58,7 @@ TQG.Categories = {
             over = "/esoui/Art/Campaign/campaign_tabIcon_browser_over.dds"
         }
     },
-    ["DLC"] = {
+    [GetString(TQG_TAB_DLC)] = {
         [1] = {
             name = GetString(TQG_GUILDS_AND_GLORY),
             down = "/esoui/art/treeicons/store_indexicon_dlc_down.dds",
@@ -120,11 +120,104 @@ TQG.Categories = {
             over = "/esoui/art/help/u46_helpcategory_update46_over.dds"
         }
     },
-    ["GROUP"] = {}
+    [GetString(TQG_TAB_GROUP)] = {
+        [01] = {
+            name = GetAllianceName(ALLIANCE_ALDMERI_DOMINION),
+            down = "/esoui/art/charactercreate/charactercreate_aldmeriicon_down.dds",
+            up = "/esoui/art/charactercreate/charactercreate_aldmeriicon_up.dds",
+            over = "/esoui/art/charactercreate/charactercreate_aldmeriicon_over.dds"
+        },
+        [02] = {
+            name = GetAllianceName(ALLIANCE_DAGGERFALL_COVENANT),
+            down = "/esoui/art/charactercreate/charactercreate_daggerfallicon_down.dds",
+            up = "/esoui/art/charactercreate/charactercreate_daggerfallicon_up.dds",
+            over = "/esoui/art/charactercreate/charactercreate_daggerfallicon_over.dds"
+        },
+        [03] = {
+            name = GetAllianceName(ALLIANCE_EBONHEART_PACT),
+            down = "/esoui/art/charactercreate/charactercreate_ebonhearticon_down.dds",
+            up = "/esoui/art/charactercreate/charactercreate_ebonhearticon_up.dds",
+            over = "/esoui/art/charactercreate/charactercreate_ebonhearticon_over.dds"
+        },
+        [04] = {
+            name = GetZoneNameById(347), -- Coldharbour
+            down = "/esoui/art/treeicons/antiquities_tabicon_coldharbour_down.dds",
+            up = "/esoui/art/treeicons/antiquities_tabicon_coldharbour_up.dds",
+            over = "/esoui/art/treeicons/antiquities_tabicon_coldharbour_over.dds"
+        },
+        [05] = {
+            name = GetZoneNameById(888), -- "Craglorn"
+            down = "/esoui/art/treeicons/antiquities_tabicon_craglorn_down.dds",
+            up = "/esoui/art/treeicons/antiquities_tabicon_craglorn_up.dds",
+            over = "/esoui/art/treeicons/antiquities_tabicon_craglorn_over.dds"
+        },
+        [06] = {
+            name = GetString(TQG_GUILDS_AND_GLORY),
+            down = "/esoui/art/treeicons/store_indexicon_dlc_down.dds",
+            up = "/esoui/art/treeicons/store_indexicon_dlc_up.dds",
+            over = "/esoui/art/treeicons/store_indexicon_dlc_over.dds"
+        },
+        [07] = {
+            name = GetString(TQG_DAEDRIC_WAR),
+            down = "/esoui/art/icons/progression_tabicon_daedricconjuration_down.dds",
+            up = "/esoui/art/icons/progression_tabicon_daedricconjuration_up.dds",
+            over = "/esoui/art/icons/progression_tabicon_daedricconjuration_over.dds"
+        },
+        [08] = {
+            name = GetZoneNameById(726), -- Murkmire
+            down = "/esoui/art/treeicons/tutorial_idexicon_murkmire_down.dds",
+            up = "/esoui/art/treeicons/tutorial_idexicon_murkmire_up.dds",
+            over = "/esoui/art/treeicons/tutorial_idexicon_murkmire_over.dds"
+        },
+        [09] = {
+            name = GetString(TQG_CHAPTER_ELSWEYR),
+            down = "/esoui/art/treeicons/tutorial_idexicon_elsweyr_down.dds",
+            up = "/esoui/art/treeicons/tutorial_idexicon_elsweyr_up.dds",
+            over = "/esoui/art/treeicons/tutorial_idexicon_elsweyr_over.dds"
+        },
+        [10] = {
+            name = GetString(TQG_CHAPTER_SKYRIM),
+            down = "/esoui/art/treeicons/tutorial_indexicon_greymoor_down.dds",
+            up = "/esoui/art/treeicons/tutorial_indexicon_greymoor_up.dds",
+            over = "/esoui/art/treeicons/tutorial_indexicon_greymoor_over.dds"
+        },
+        [11] = {
+            name = GetString(TQG_CHAPTER_BLACKWOOD),
+            down = "/esoui/art/treeicons/tutorial_idexicon_deadlands_down.dds",
+            up = "/esoui/art/treeicons/tutorial_idexicon_deadlands_up.dds",
+            over = "/esoui/art/treeicons/tutorial_idexicon_deadlands_over.dds"
+        },
+        [12] = {
+            name = GetString(TQG_CHAPTER_HIGH_ISLE),
+            down = "/esoui/art/charactercreate/charactercreate_bretonicon_down.dds",
+            up = "/esoui/art/charactercreate/charactercreate_bretonicon_up.dds",
+            over = "/esoui/art/charactercreate/charactercreate_bretonicon_over.dds"
+        },
+        [13] = {
+            name = GetString(TQG_CHAPTER_SHADOW_MORROWIND),
+            down = "/esoui/art/charactercreate/charactercreate_arcanisticon_down.dds",
+            up = "/esoui/art/charactercreate/charactercreate_arcanisticon_up.dds",
+            over = "/esoui/art/charactercreate/charactercreate_arcanisticon_over.dds"
+        },
+        [14] = {
+            name = GetString(TQG_CHAPTER_RECOLLECTION_ITHELIA),
+            down = "/esoui/art/charactercreate/charactercreate_arcanisticon_down.dds",
+            up = "/esoui/art/charactercreate/charactercreate_arcanisticon_up.dds",
+            over = "/esoui/art/charactercreate/charactercreate_arcanisticon_over.dds"
+        }
+    }
+}
+
+TQG.Categories[GetString(TQG_TAB_GROUP)][#TQG.Categories[GetString(TQG_TAB_GROUP)] +
+    1] = {
+    name = GetString(TQG_DUNGEON_DLC_OLD),
+    down = "esoui/art/treeicons/reconstruction_tabicon_dungeon_down.dds",
+    up = "esoui/art/treeicons/reconstruction_tabicon_dungeon_up.dds",
+    over = "esoui/art/treeicons/reconstruction_tabicon_dungeon_over.dds"
 }
 
 TQG.Zones = {
-    ["CLASSIC"] = {
+    [GetString(TQG_TAB_CLASSIC)] = {
         [1] = {
             [01] = {zoneId = 586},
             [02] = {zoneId = 1429},
@@ -184,7 +277,7 @@ TQG.Zones = {
         [8] = {[1] = {zoneId = 888}},
         [9] = {[1] = {zoneId = 181}}
     },
-    ["DLC"] = {
+    [GetString(TQG_TAB_DLC)] = {
         [1] = {
             [01] = {zoneId = 584},
             [02] = {zoneId = 684},
@@ -238,7 +331,7 @@ TQG.Zones = {
         [8] = {
             [01] = {zoneId = 1389},
             [02] = {zoneId = 1390},
-            [03] = {zoneId = 1413, hasPrologue = true, numPrologueQuests = 1},
+            [03] = {zoneId = 1414, hasPrologue = true, numPrologueQuests = 1},
             [04] = {zoneId = 1436}
         },
         [9] = {
@@ -253,13 +346,72 @@ TQG.Zones = {
             [03] = {zoneId = 1502, hasPrologue = true, numPrologueQuests = 2}
         }
     },
-    ["GROUP"] = {}
+    [GetString(TQG_TAB_GROUP)] = {
+        [01] = {
+            [01] = {zoneId = 380, zoneName = GetZoneNameById(381)},
+            [02] = {zoneId = 126, zoneName = GetZoneNameById(383)},
+            [03] = {zoneId = 176, zoneName = GetZoneNameById(108)},
+            [04] = {zoneId = 131, zoneName = GetZoneNameById(058)},
+            [05] = {zoneId = 031, zoneName = GetZoneNameById(382)}
+        },
+        [02] = {
+            [01] = {zoneId = 144, zoneName = GetZoneNameById(003)},
+            [02] = {zoneId = 146, zoneName = GetZoneNameById(019)},
+            [03] = {zoneId = 130, zoneName = GetZoneNameById(020)},
+            [04] = {zoneId = 022, zoneName = GetZoneNameById(104)},
+            [05] = {zoneId = 038, zoneName = GetZoneNameById(092)}
+        },
+        [03] = {
+            [01] = {zoneId = 283, zoneName = GetZoneNameById(041)},
+            [02] = {zoneId = 063, zoneName = GetZoneNameById(057)},
+            [03] = {zoneId = 148, zoneName = GetZoneNameById(117)},
+            [04] = {zoneId = 449, zoneName = GetZoneNameById(101)},
+            [05] = {zoneId = 064, zoneName = GetZoneNameById(103)}
+        },
+        [04] = {[01] = {zoneId = 011, zoneName = GetZoneNameById(347)}},
+        [05] = {
+            [01] = {zoneId = 638, zoneName = GetZoneNameById(888)},
+            [02] = {zoneId = 636, zoneName = GetZoneNameById(888)},
+            [03] = {zoneId = 639, zoneName = GetZoneNameById(888)}
+        },
+        [06] = {
+            [01] = {zoneId = 678, zoneName = GetZoneNameById(584)},
+            [02] = {zoneId = 688, zoneName = GetZoneNameById(584)},
+            [03] = {zoneId = 677, zoneName = GetZoneNameById(684)},
+            [04] = {zoneId = 725, zoneName = GetZoneNameById(816)}
+        },
+        [07] = {
+            [01] = {zoneId = 975, zoneName = GetZoneNameById(849)},
+            [02] = {zoneId = 1000, zoneName = GetZoneNameById(980)},
+            [03] = {zoneId = 1051, zoneName = GetZoneNameById(1011)}
+        },
+        [08] = {[01] = {zoneId = 1082, zoneName = GetZoneNameById(726)}},
+        [09] = {[01] = {zoneId = 1121, zoneName = GetZoneNameById(1086)}},
+        [10] = {
+            [01] = {zoneId = 1196, zoneName = GetZoneNameById(1160)},
+            [02] = {zoneId = 1227, zoneName = GetZoneNameById(1207)}
+        },
+        [11] = {[01] = {zoneId = 1263, zoneName = GetZoneNameById(1261)}},
+        [12] = {[01] = {zoneId = 1344, zoneName = GetZoneNameById(1318)}},
+        [13] = {[01] = {zoneId = 1427, zoneName = GetZoneNameById(1414)}},
+        [14] = {[01] = {zoneId = 1478, zoneName = GetZoneNameById(1443)}}
+    }
 }
 
-local getQuestName = getQuestName
+TQG.Zones[GetString(TQG_TAB_GROUP)][#TQG.Zones[GetString(TQG_TAB_GROUP)] + 1] =
+    {
+        [01] = {zoneId = 0843},
+        [02] = {zoneId = 0848},
+        [03] = {zoneId = 0974},
+        [04] = {zoneId = 0973},
+        [05] = {zoneId = 1010},
+        [06] = {zoneId = 1009},
+        [07] = {zoneId = 1052},
+        [08] = {zoneId = 1055}
+    }
 
 TQG.Objectives = {
-    ["CLASSIC"] = {
+    [GetString(TQG_TAB_CLASSIC)] = {
         [1] = {
             [01] = {[1] = {questId = 4296}},
             [02] = {[1] = {questId = 4831}},
@@ -340,7 +492,7 @@ TQG.Objectives = {
         [8] = {[1] = {[1] = {questId = 0}}},
         [9] = {[1] = {[1] = {questId = 4704}}}
     },
-    ["DLC"] = {
+    [GetString(TQG_TAB_DLC)] = {
         [1] = {
             [1] = {[1] = {questId = 0}},
             [2] = {[1] = {questId = 0}},
@@ -386,7 +538,7 @@ TQG.Objectives = {
                 [08] = {questId = 6198},
                 [09] = {questId = 6195},
                 [10] = {questId = 6196},
-                [11] = {questId = 6199},
+                [11] = {questId = 6199}
             }
         },
         [3] = {
@@ -588,5 +740,66 @@ TQG.Objectives = {
             }
         }
     },
-    ["GROUP"] = {}
+    [GetString(TQG_TAB_GROUP)] = {
+        [01] = {
+            [1] = {[1] = {questId = 4107}, [2] = {questId = 4597}},
+            [2] = {[1] = {questId = 4336}, [2] = {questId = 4675}},
+            [3] = {[1] = {questId = 4778}, [2] = {questId = 5120}},
+            [4] = {[1] = {questId = 4538}},
+            [5] = {[1] = {questId = 4733}}
+        },
+        [02] = {
+            [1] = {[1] = {questId = 4054}, [2] = {questId = 4555}},
+            [2] = {[1] = {questId = 4246}, [2] = {questId = 4813}},
+            [3] = {[1] = {questId = 4379}, [2] = {questId = 5113}},
+            [4] = {[1] = {questId = 4432}},
+            [5] = {[1] = {questId = 4589}}
+        },
+        [03] = {
+            [1] = {[1] = {questId = 3993}, [2] = {questId = 4303}},
+            [2] = {[1] = {questId = 4145}, [2] = {questId = 4641}},
+            [3] = {[1] = {questId = 4202}},
+            [4] = {[1] = {questId = 4346}},
+            [5] = {[1] = {questId = 4469}}
+        },
+        [04] = {[1] = {[1] = {questId = 4822}}},
+        [05] = {
+            [1] = {[1] = {questId = 5102}},
+            [2] = {[1] = {questId = 5087}},
+            [3] = {[1] = {questId = 5171}}
+        },
+        [06] = {
+            [1] = {[1] = {questId = 5136}},
+            [2] = {[1] = {questId = 5342}},
+            [3] = {[1] = {questId = 5448}},
+            [4] = {[1] = {questId = 5554}, [2] = {questId = 5352}}
+        },
+        [07] = {
+            [1] = {[1] = {questId = 6000}, [2] = {questId = 5894}},
+            [2] = {[1] = {questId = 6090}},
+            [3] = {[1] = {questId = 6193}, [2] = {questId = 6192}}
+        },
+        [08] = {[1] = {[1] = {questId = 6269}}},
+        [09] = {[1] = {[1] = {questId = 6354}, [2] = {questId = 6353}}},
+        [10] = {
+            [1] = {[1] = {questId = 6504}, [2] = {questId = 6503}},
+            [2] = {[1] = {questId = 6597}, [2] = {questId = 6610}}
+        },
+        [11] = {[1] = {[1] = {questId = 6655}, [2] = {questId = 6654}}},
+        [12] = {[1] = {[1] = {questId = 6784}, [2] = {questId = 6783}}},
+        [13] = {[1] = {[1] = {questId = 7032}, [2] = {questId = 7031}}},
+        [14] = {[1] = {[1] = {questId = 7213}, [2] = {questId = 7212}}}
+    }
+}
+
+TQG.Objectives[GetString(TQG_TAB_GROUP)][#TQG.Objectives[GetString(TQG_TAB_GROUP)] +
+    1] = {
+    [1] = {[1] = {questId = 5403}},
+    [2] = {[1] = {questId = 5702}},
+    [3] = {[1] = {questId = 5891}},
+    [4] = {[1] = {questId = 5889}},
+    [5] = {[1] = {questId = 6065}},
+    [6] = {[1] = {questId = 6064}},
+    [7] = {[1] = {questId = 6186}},
+    [8] = {[1] = {questId = 6188}}
 }

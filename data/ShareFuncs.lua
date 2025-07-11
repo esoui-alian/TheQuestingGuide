@@ -1,6 +1,7 @@
 local TQG = TheQuestingGuide or {}
 
 local CR = CHAT_ROUTER
+local strfmt, zStrFmt = string.format, zo_strformat
 
 local zoneData = TQG.Zones or {}
 local catData = TQG.Categories or {}
@@ -42,8 +43,17 @@ function TQG.GetZoneInfo(tab, category, zone)
     local zoneCounter = zone
     local zoneName = zoneData[tab][category][zone].zoneName or
                          getZoneNameById(zoneId) or "Unknown Zone"
-    local zoneDeescription = getZoneDescriptionById(zoneId) or "No Description"
-    return zoneName, zoneDeescription, zoneCounter
+
+    local zoneDescription = getZoneDescriptionById(zoneId) or "No Description"
+    
+    if tab == GetString(TQG_TAB_GROUP) then
+        local groupZoneName = getZoneNameById(zoneId)
+
+        zoneDescription = zStrFmt("<<Z:1>>: <<2>>", groupZoneName, zoneDescription)
+        zoneDescription = zoneDescription:gsub(" II:",":"):gsub(" I:",":")
+    end
+
+    return zoneName, zoneDescription, zoneCounter
 end
 
 function TQG.GetNumZonesForCategory(tab, category)

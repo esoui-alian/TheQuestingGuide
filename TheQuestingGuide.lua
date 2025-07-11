@@ -86,21 +86,21 @@ local function SceneGroupSetup()
 
     local iconData = {
         {
-            categoryName = TQG_CLASSIC_TAB,
+            categoryName = TQG_TAB_CLASSIC,
             -- visible = function() return true end,
             descriptor = "TheQuestingGuideClassic",
             normal = "esoui/art/campaign/campaignbrowser_indexicon_specialevents_up.dds",
             pressed = "esoui/art/campaign/campaignbrowser_indexicon_specialevents_down.dds",
             highlight = "esoui/art/campaign/campaignbrowser_indexicon_specialevents_over.dds"
         }, {
-            categoryName = TQG_DLC_TAB,
+            categoryName = TQG_TAB_DLC,
             -- visible = function() return true end,
             descriptor = "TheQuestingGuideDLC",
             normal = "esoui/art/treeicons/store_indexicon_dlc_up.dds",
             pressed = "esoui/art/treeicons/store_indexicon_dlc_down.dds",
             highlight = "esoui/art/treeicons/store_indexicon_dlc_over.dds"
         }, {
-            categoryName = TQG_GROUP_TAB,
+            categoryName = TQG_TAB_GROUP,
             -- visible = function() return true end,
             descriptor = "TheQuestingGuideGroup",
             normal = "esoui/art/icons/achievements_indexicon_dungeons_up.dds",

@@ -35,7 +35,7 @@
         <TopLevelControl name="TheQuestingGuideGroup_Top" inherits="ZO_RightPanelFootPrint"
             hidden="true">
             <OnInitialized>
-                TheQuestingGuideGroup_Initialize(self, "GROUP", "TheQuestingGuideGroup_ObjectiveLine")
+                TheQuestingGuideGroup_Initialize(self, GetString(TQG_TAB_GROUP), "TheQuestingGuideGroup_ObjectiveLine")
             </OnInitialized>
             <OnEffectivelyShown>
                 TheQuestingGuideGroup_OnShown()
