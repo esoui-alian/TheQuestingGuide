@@ -2,6 +2,14 @@ local TQG = TheQuestingGuide
 local strfmt, zStrFmt = string.format, zo_strformat
 
 TQG.Categories = {
+    [GetString(TQG_TAB_OVERVIEW)] = {
+        [1] = {
+            name = GetString(TQG_TAB_OVERVIEW),
+            down = "/esoui/art/progression/progression_indexicon_world_down.dds",
+            up = "/esoui/art/progression/progression_indexicon_world_up.dds",
+            over = "/esoui/art/progression/progression_indexicon_world_over.dds"
+        }
+    },
     [GetString(TQG_TAB_CLASSIC)] = {
         [1] = {
             name = GetString(TQG_ARC_PLANEMELD),
@@ -217,6 +225,25 @@ TQG.Categories[GetString(TQG_TAB_GROUP)][#TQG.Categories[GetString(TQG_TAB_GROUP
 }
 
 TQG.Zones = {
+    [GetString(TQG_TAB_OVERVIEW)] = {
+        [1] = {
+            [01] = {
+                zoneId = 000,
+                zoneName = GetString(TQG_TAB_CLASSIC),
+                zoneDesc = GetString(TQG_OVERVIEW_DESC_CLASSIC)
+            },
+            [02] = {
+                zoneId = 000,
+                zoneName = GetString(TQG_TAB_DLC),
+                zoneDesc = GetString(TQG_OVERVIEW_DESC_DLC)
+            },
+            [03] = {
+                zoneId = 000,
+                zoneName = GetString(TQG_TAB_GROUP),
+                zoneDesc = GetString(TQG_OVERVIEW_DESC_GROUP)
+            }
+        }
+    },
     [GetString(TQG_TAB_CLASSIC)] = {
         [1] = {
             [01] = {zoneId = 586},
@@ -675,8 +702,8 @@ TQG.Objectives = {
                     openingText = GetString(TQG_PROLOGUE)
                 }
             },
-            [4] = {questId = 6835},
-            [5] = {questId = 6837},
+            [4] = {[1] = {questId = 6835}},
+            [5] = {[1] = {questId = 6837}},
             [6] = {
                 [1] = {
                     questId = 6843,
@@ -705,7 +732,7 @@ TQG.Objectives = {
                     openingText = GetString(TQG_PROLOGUE)
                 }
             },
-            [4] = {questId = 7061}
+            [4] = {[1] = {questId = 7061}}
         },
         [9] = {
             [1] = {[1] = {questId = 7155}},

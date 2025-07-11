@@ -288,6 +288,10 @@ function TQG_Manager:OnShown()
 end
 
 -- XML Handlers
+function TheQuestingGuideOverview_OnShown() QUESTINGGUIDE_OVERVIEW:OnShown() end
+function TheQuestingGuideOverview_Initialize(control, tabInput, objectiveLinePool)
+    QUESTINGGUIDE_OVERVIEW = TQG_Manager:New(control, tabInput, objectiveLinePool)
+end
 
 function TheQuestingGuideClassic_OnShown() QUESTINGGUIDE_CLASSIC:OnShown() end
 function TheQuestingGuideClassic_Initialize(control, tabInput, objectiveLinePool)

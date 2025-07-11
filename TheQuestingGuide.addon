@@ -4,9 +4,10 @@
 ## Version: 1.00
 ## AddOnVersion: 000100
 ## APIVersion: 101046 101047
-## DependsOn: LibUespQuestData>=20250601 LibMainMenu-2.0>=40400
+## PCDependsOn: LibUespQuestData>=20250601 LibMainMenu-2.0>=40400
+## ConsoleDependsOn: LibConsoleDialogs>=10002
 
-Bindings.xml
+
 
 ; Language Files
 lang/en.lua
@@ -16,18 +17,22 @@ lang/$(language).lua
 data/QuestData.lua
 data/ShareFuncs.lua
 
-; Keyboard
-TheQuestingGuide.lua
+
+
+;; PC Code
+PC/xml/Bindings.xml
+
+; init logic
+PC/lua/TheQuestingGuide_PC.lua
 
 ; lua logic
-;TheQuestingGuide_Overview.lua
-TheQuestingGuide_QuestTabs.lua
+PC/lua/TheQuestingGuide_QuestTabs.lua
 
 ; XML
-;TheQuestingGuide_Overview.xml
-xml/TheQuestingGuide_Classic.xml
-xml/TheQuestingGuide_DLC.xml
-xml/TheQuestingGuide_Group.xml
+PC/xml/TheQuestingGuide_Overview.xml
+PC/xml/TheQuestingGuide_Classic.xml
+PC/xml/TheQuestingGuide_DLC.xml
+PC/xml/TheQuestingGuide_Group.xml
 
 ; This Add-on is not created by, affiliated with or sponsored by ZeniMax
 ; Media Inc. or its affiliates. The Elder Scrolls® and related logos are

@@ -44,13 +44,16 @@ function TQG.GetZoneInfo(tab, category, zone)
     local zoneName = zoneData[tab][category][zone].zoneName or
                          getZoneNameById(zoneId) or "Unknown Zone"
 
-    local zoneDescription = getZoneDescriptionById(zoneId) or "No Description"
-    
+    local zoneDescription = zoneData[tab][category][zone].zoneDesc or
+                                getZoneDescriptionById(zoneId) or
+                                "No Description"
+
     if tab == GetString(TQG_TAB_GROUP) then
         local groupZoneName = getZoneNameById(zoneId)
 
-        zoneDescription = zStrFmt("<<Z:1>>: <<2>>", groupZoneName, zoneDescription)
-        zoneDescription = zoneDescription:gsub(" II:",":"):gsub(" I:",":")
+        zoneDescription = zStrFmt("<<Z:1>>: <<2>>", groupZoneName,
+                                  zoneDescription)
+        zoneDescription = zoneDescription:gsub(" II:", ":"):gsub(" I:", ":")
     end
 
     return zoneName, zoneDescription, zoneCounter
@@ -82,16 +85,20 @@ local function IsQuestinJournal(questName)
     end
 end
 
-local function GetUESPLocationInfo(questId, questName, isOpeningText,
-                                   isClosingText)
+local function GetUESPLocationInfo(questId, questName, discovered,
+                                   isOpeningText, isClosingText)
     if not LibUespQuestData then return end
 
     if questId then
         if isOpeningText then
-            local zoneName, objectiveName =
-                LibUespQuestData:GetUespQuestLocationInfo(questId)
-            return (objectiveName ~= "" and objectiveName) or
-                       (zoneName ~= "" and zoneName)
+            if discovered then
+                return LibUespQuestData:GetUespQuestBackgroundText(questId)
+            else
+                local zoneName, objectiveName =
+                    LibUespQuestData:GetUespQuestLocationInfo(questId)
+                return (objectiveName ~= "" and objectiveName) or
+                           (zoneName ~= "" and zoneName)
+            end
         elseif isClosingText then
             return LibUespQuestData:GetUespQuestBackgroundText(questId)
         end
@@ -103,9 +110,15 @@ local function GetUESPLocationInfo(questId, questName, isOpeningText,
         for questId, questData in pairs(LibUespQuestData.quests) do
             if getQuestName(questId) == questName then
                 if isOpeningText then
-                    zoneName, objectiveName =
-                        LibUespQuestData:GetUespQuestLocationInfo(questId)
-                    return (objectiveName ~= "" and objectiveName) or zoneName
+                    if discovered then
+                        return LibUespQuestData:GetUespQuestBackgroundText(
+                                   questId)
+                    else
+                        zoneName, objectiveName =
+                            LibUespQuestData:GetUespQuestLocationInfo(questId)
+                        return (objectiveName ~= "" and objectiveName) or
+                                   zoneName
+                    end
                 elseif isClosingText then
                     return LibUespQuestData:GetUespQuestBackgroundText(questId)
                 end
@@ -124,10 +137,10 @@ local function GetObjectiveInfo(questId, openingText, closingText)
     local zoneName = GetZoneNameById(GetQuestZoneId(questId))
     local _, objectiveName = GetCompletedQuestLocationInfo(questId)
 
-    local openingUESP = GetUESPLocationInfo(questId, _, true)
+    local openingUESP = GetUESPLocationInfo(questId, _, discovered, true)
     local openingText = openingText or openingUESP or ""
 
-    local closingUESP = GetUESPLocationInfo(questId, _, false, true)
+    local closingUESP = GetUESPLocationInfo(questId, _, discovered, false, true)
     local closingText = closingText or closingUESP or ""
 
     if openingText == "" then
@@ -138,7 +151,7 @@ local function GetObjectiveInfo(questId, openingText, closingText)
                           (zoneName ~= "" and zoneName) or "No Closing Text"
     end
 
-    return questName, openingText, closingText, completed, discovered
+    return questName, openingText, closingText, discovered, completed
 end
 
 function TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category, zone,
@@ -157,8 +170,10 @@ function TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category, zone,
                                                   objective)
     local discovered = completed or IsQuestinJournal(questName)
 
-    local openingText = GetUESPLocationInfo(_, questName, true) or ""
-    local closingText = GetUESPLocationInfo(_, questName, false, true) or ""
+    local openingText = GetUESPLocationInfo(_, questName, discovered, true) or
+                            ""
+    local closingText = GetUESPLocationInfo(_, questName, discovered, false,
+                                            true) or ""
 
     if openingText == "" then openingText = "No Opening Text" end
     if closingText == "" then closingText = "No Closing Text" end

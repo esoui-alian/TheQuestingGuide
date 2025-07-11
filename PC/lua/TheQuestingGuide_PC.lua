@@ -1,6 +1,28 @@
 ﻿local TQG = TheQuestingGuide
 local LMM = LibMainMenu2
 
+local function CreateOverviewScene()
+
+    TQG_OVERVIEW_SCENE = ZO_Scene:New("TheQuestingGuideOverview", SCENE_MANAGER)
+
+    TQG_OVERVIEW_SCENE:AddFragmentGroup(FRAGMENT_GROUP.MOUSE_DRIVEN_UI_WINDOW)
+    TQG_OVERVIEW_SCENE:AddFragmentGroup(
+        FRAGMENT_GROUP.FRAME_TARGET_STANDARD_RIGHT_PANEL)
+    TQG_OVERVIEW_SCENE:AddFragmentGroup(
+        FRAGMENT_GROUP.PLAYER_PROGRESS_BAR_KEYBOARD_CURRENT)
+    TQG_OVERVIEW_SCENE:AddFragment(TREE_UNDERLAY_FRAGMENT)
+    TQG_OVERVIEW_SCENE:AddFragment(TITLE_FRAGMENT)
+    TQG_OVERVIEW_SCENE:AddFragment(ZO_SetTitleFragment:New(TQG_MENU_TITLE))
+    TQG_OVERVIEW_SCENE:AddFragment(CODEX_WINDOW_SOUNDS)
+    TQG_OVERVIEW_SCENE:AddFragment(FRAME_EMOTE_FRAGMENT_JOURNAL)
+    TQG_OVERVIEW_SCENE:AddFragment(RIGHT_BG_FRAGMENT)
+
+    TQG_OVERVIEW_FRAGMENT = ZO_HUDFadeSceneFragment:New(
+                                TheQuestingGuideOverview_Top)
+    TQG_OVERVIEW_SCENE:AddFragment(TQG_OVERVIEW_FRAGMENT)
+
+end
+
 local function CreateClassicScene()
 
     TQG_CLASSIC_SCENE = ZO_Scene:New("TheQuestingGuideClassic", SCENE_MANAGER)
@@ -20,9 +42,6 @@ local function CreateClassicScene()
     TQG_CLASSIC_FRAGMENT = ZO_HUDFadeSceneFragment:New(
                                TheQuestingGuideClassic_Top)
     TQG_CLASSIC_SCENE:AddFragment(TQG_CLASSIC_FRAGMENT)
-
-    -- cadwellsAlmanacScene:AddFragment(ZO_TutorialTriggerFragment:New(
-    --                                    TUTORIAL_TRIGGER_CADWELLS_ALMANAC_OPENED))
 
 end
 
@@ -45,9 +64,6 @@ local function CreateDLCScene()
     TQG_DLC_FRAGMENT = ZO_HUDFadeSceneFragment:New(TheQuestingGuideDLC_Top)
     TQG_DLC_SCENE:AddFragment(TQG_DLC_FRAGMENT)
 
-    -- cadwellsAlmanacScene:AddFragment(ZO_TutorialTriggerFragment:New(
-    --                                    TUTORIAL_TRIGGER_CADWELLS_ALMANAC_OPENED))
-
 end
 
 local function CreateGroupScene()
@@ -69,9 +85,6 @@ local function CreateGroupScene()
     TQG_GROUP_FRAGMENT = ZO_HUDFadeSceneFragment:New(TheQuestingGuideGroup_Top)
     TQG_GROUP_SCENE:AddFragment(TQG_GROUP_FRAGMENT)
 
-    -- cadwellsAlmanacScene:AddFragment(ZO_TutorialTriggerFragment:New(
-    --                                    TUTORIAL_TRIGGER_CADWELLS_ALMANAC_OPENED))
-
 end
 
 local function SceneGroupSetup()
@@ -79,13 +92,20 @@ local function SceneGroupSetup()
     TQG_MENU_CATEGORY_DATA = {
         -- binding = "",
         categoryName = TQG_MENU_TITLE,
-            normal = "esoui/art/progression/progression_indexicon_world_up.dds",
-            pressed = "esoui/art/progression/progression_indexicon_world_down.dds",
-            highlight = "esoui/art/progression/progression_indexicon_world_over.dds"
+        normal = "esoui/art/progression/progression_indexicon_world_up.dds",
+        pressed = "esoui/art/progression/progression_indexicon_world_down.dds",
+        highlight = "esoui/art/progression/progression_indexicon_world_over.dds"
     }
 
     local iconData = {
         {
+            categoryName = TQG_TAB_OVERVIEW,
+            -- visible = function() return true end,
+            descriptor = "TheQuestingGuideOverview",
+            normal = "esoui/art/progression/progression_indexicon_world_up.dds",
+            pressed = "esoui/art/progression/progression_indexicon_world_down.dds",
+            highlight = "esoui/art/progression/progression_indexicon_world_over.dds"
+        }, {
             categoryName = TQG_TAB_CLASSIC,
             -- visible = function() return true end,
             descriptor = "TheQuestingGuideClassic",
@@ -110,7 +130,8 @@ local function SceneGroupSetup()
     }
 
     SCENE_MANAGER:AddSceneGroup("TQGSceneGroup",
-                                ZO_SceneGroup:New("TheQuestingGuideClassic",
+                                ZO_SceneGroup:New("TheQuestingGuideOverview",
+                                                  "TheQuestingGuideClassic",
                                                   "TheQuestingGuideDLC",
                                                   "TheQuestingGuideGroup"))
 
@@ -125,9 +146,10 @@ local function addonLoaded(event, addonName)
     if addonName ~= TQG.name then return end
 
     -- Initialize the scenes
+    CreateOverviewScene()
     CreateClassicScene()
-    CreateDLCScene()
     CreateGroupScene()
+    CreateDLCScene()
 
     SceneGroupSetup()
 
