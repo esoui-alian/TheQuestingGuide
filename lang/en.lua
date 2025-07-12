@@ -16,12 +16,13 @@ local overviewGroupTabArenaIconTwo =
 
 local stringsEN = {
     SI_BINDING_NAME_TQG_OPEN_KEY = "Toggle Questing Guide",
+    SI_BINDING_NAME_TQG_OPEN_KEY_GAMEPAD = "Toggle Questing Guide: Gamepad",
 
     TQG_MENU_TITLE = "The Questing Guide",
 
     TQG_TAB_OVERVIEW = GetString(SI_CUSTOMER_SERVICE_OVERVIEW), -- "Overview"
     TQG_OVERVIEW_DESC_CLASSIC = "The Planemeld Arc: this is the original ESO story in the Aurbis, and the tale will interweave amongst Main Story, Alliance, and Guild Storylines as you progress.\n\nThe Alliance Stories (these happen in parallel):\nStart with the beginner island(s), then Auridon/Glenumbra/Stonefalls, etc. You should not feel like you have to complete every Alliance's story before reaching Coldharbour, however.\n\nThe original Alliance Story pathway was;\n - Player's Alliance\n - Coldharbour\n - Cadwell's Silver (next Alliance in clockwise order)\n - Cadwell's Gold (last Alliance in clockwise order)",
-    TQG_OVERVIEW_DESC_DLC = "The DLC section covers off every major storyline since the introduction of the DLC dungeons, zones, and Chapters.\n\nThe order presented defaults to the order of release...\n\nMajor Events include:\n - The Sublime Plot\n - Reforging Orsinium\n - Thieves Guild & Dark Brotherhood\n - Daedric War\n - A Lost Legacy\n - Ongoing Chapter Stories\n - Ongoing Seasonal Content",
+    TQG_OVERVIEW_DESC_DLC = "The DLC section covers off every major storyline since the introduction of the DLC dungeons, zones, and Chapters.\n\nThe order presented defaults to the order of release...\n\nMajor Events include:\n - The Sublime Plot\n - Reforging Orsinium & Thieves Guild + Dark Brotherhood\n - Daedric War\n - A Lost Legacy\n - Chapter Stories\n - Ongoing Seasonal Content",
     TQG_OVERVIEW_DESC_GROUP = strfmt(overviewGroupTabDescFmt,
                                      "The Group section includes the majority of instanced Group Content to-date.",
                                      "Dungeons: ", overviewGroupTabDungIcon,

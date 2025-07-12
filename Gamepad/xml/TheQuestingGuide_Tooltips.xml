@@ -1,0 +1,155 @@
+<GuiXml>
+    <Controls>
+        <TopLevelControl name="TheQuestingGuide_GamepadTooltipTopLevel" tier="MEDIUM">
+            <AnchorFill />
+            <OnInitialized>
+                TheQuestingGuide_GamepadTooltip_OnInitialized(self, ZO_GamepadDialogTooltipTopLevel)
+            </OnInitialized>
+            <Controls>
+                <Control name="$(parent)LeftTooltip"
+                    inherits="ZO_GamepadTooltipTemplate ZO_GamepadGrid_NavQuadrant_2_Anchors"
+                    hidden="true" />
+
+                <Control name="$(parent)LeftTooltipBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_SharedGamepadNavQuadrant_2_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)LeftTooltipDarkBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_SharedGamepadNavQuadrant_2_Background_Template" />
+                        <Control name="$(parent)Darkener"
+                            inherits="ZO_SharedGamepadNavQuadrant_2_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)RightTooltip"
+                    inherits="ZO_GamepadTooltipTemplate ZO_GamepadGrid_NavQuadrant_4_Anchors"
+                    hidden="true" />
+
+                <Control name="$(parent)RightTooltipBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_SharedGamepadNavQuadrant_4_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)RightHeaderContainer"
+                    inherits="ZO_GamepadGrid_NavQuadrant_4_Anchors" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)ContentContainer"
+                            inherits="ZO_GamepadScreenHeaderContainer ZO_GamepadGrid_NavQuadrant_ContainerAnchors" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)RightTooltipDarkBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_SharedGamepadNavQuadrant_4_Background_Template" />
+                        <Control name="$(parent)Darkener"
+                            inherits="ZO_SharedGamepadNavQuadrant_4_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)MovableTooltip"
+                    inherits="ZO_GamepadTooltipTemplate ZO_GamepadGrid_NavQuadrant_4_Anchors"
+                    hidden="true" />
+
+                <Control name="$(parent)MovableTooltipBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_SharedGamepadNavQuadrant_4_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)MovableTooltipDarkBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_SharedGamepadNavQuadrant_4_Background_Template" />
+                        <Control name="$(parent)Darkener"
+                            inherits="ZO_SharedGamepadNavQuadrant_4_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)Quadrant3Tooltip"
+                    inherits="ZO_GamepadTooltipTemplate ZO_GamepadGrid_NavQuadrant_3_Anchors"
+                    hidden="true" />
+
+                <Control name="$(parent)Quadrant3TooltipBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_RightArrowGamepadNavQuadrant_3_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)Quadrant3HeaderContainer"
+                    inherits="ZO_GamepadGrid_NavQuadrant_3_Anchors" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)ContentContainer"
+                            inherits="ZO_GamepadScreenHeaderContainer ZO_GamepadGrid_NavQuadrant_ContainerAnchors" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)Quadrant3TooltipDarkBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_RightArrowGamepadNavQuadrant_3_Background_Template" />
+                        <Control name="$(parent)Darkener"
+                            inherits="ZO_RightArrowGamepadNavQuadrant_3_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)Quadrant1Tooltip"
+                    inherits="ZO_GamepadTooltipTemplate ZO_GamepadGrid_NavQuadrant_1_Anchors"
+                    hidden="true" />
+
+                <Control name="$(parent)Quadrant1TooltipBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_SharedGamepadNavQuadrant_1_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)Quadrant1TooltipDarkBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_SharedGamepadNavQuadrant_1_Background_Template" />
+                        <Control name="$(parent)Darkener"
+                            inherits="ZO_SharedGamepadNavQuadrant_1_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)Quadrant_2_3_Tooltip"
+                    inherits="ZO_GamepadTooltipTemplate ZO_GamepadGrid_NavQuadrant_2_3_Anchors"
+                    hidden="true" />
+
+                <Control name="$(parent)Quadrant_2_3_TooltipBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_SharedGamepadNavQuadrant_2_3_Background_Template" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)Quadrant_2_3_HeaderContainer"
+                    inherits="ZO_GamepadGrid_NavQuadrant_2_3_Anchors" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)ContentContainer"
+                            inherits="ZO_GamepadContentHeaderContainer ZO_GamepadGrid_NavQuadrant_ContainerAnchors" />
+                    </Controls>
+                </Control>
+
+                <Control name="$(parent)Quadrant_2_3_TooltipDarkBg" hidden="true">
+                    <Controls>
+                        <Control name="$(parent)Bg"
+                            inherits="ZO_SharedGamepadNavQuadrant_2_3_Background_Template" />
+                        <Control name="$(parent)Darkener"
+                            inherits="ZO_SharedGamepadNavQuadrant_2_3_Background_Template" />
+                    </Controls>
+                </Control>
+            </Controls>
+        </TopLevelControl>
+    </Controls>
+</GuiXml>

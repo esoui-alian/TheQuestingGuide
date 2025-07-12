@@ -4,7 +4,7 @@
 ## Version: 1.00
 ## AddOnVersion: 000100
 ## APIVersion: 101046 101047
-## PCDependsOn: LibUespQuestData>=20250601 LibMainMenu-2.0>=40400
+## PCDependsOn: LibUespQuestData>=20250601 LibMainMenu-2.0>=40400 LibConsoleDialogs>=10003
 ## ConsoleDependsOn: LibConsoleDialogs>=10002
 
 
@@ -15,9 +15,21 @@ lang/$(language).lua
 
 ; Data
 data/QuestData.lua
-data/ShareFuncs.lua
+data/UtilityFuncs.lua
 
+;; Console Code
+; init logic
+Gamepad/lua/TheQuestingGuide_Gamepad.lua
 
+; lua logic
+Gamepad/lua/TheQuestingGuide_QuestTabs.lua
+
+; XML
+Gamepad/xml/TheQuestingGuide_Tooltips.xml
+Gamepad/xml/TheQuestingGuide_Overview.xml
+Gamepad/xml/TheQuestingGuide_Classic.xml
+Gamepad/xml/TheQuestingGuide_DLC.xml
+Gamepad/xml/TheQuestingGuide_Group.xml
 
 ;; PC Code
 PC/xml/Bindings.xml

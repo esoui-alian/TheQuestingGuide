@@ -5,6 +5,10 @@
                 <Down>TheQuestingGuide.ToggleMenu()</Down>
                 <Up></Up>
             </Action>
+            <Action name="TQG_OPEN_KEY_GAMEPAD">
+                <Down>TheQuestingGuide.ToggleMenu_Gamepad()</Down>
+                <Up></Up>
+            </Action>            
         </Category>
     </Layer>
 </Bindings>
