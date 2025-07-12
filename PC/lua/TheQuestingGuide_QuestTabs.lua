@@ -16,7 +16,7 @@ function TQG_Manager:New(control, tabInput, objectiveLinePool)
     manager.descriptionText = control:GetNamedChild("DescriptionText")
     manager.objectivesText = control:GetNamedChild("ObjectivesText")
     manager.objectiveLinePool = ZO_ControlPool:New(
-                                    "TheQuestingGuideClassic_ObjectiveLine",
+                                    "TheQuestingGuideOverview_ObjectiveLine",
                                     control, "Objective")
 
     manager.currentCadwellCategory = TQG.GetNumCategories(manager.tab)

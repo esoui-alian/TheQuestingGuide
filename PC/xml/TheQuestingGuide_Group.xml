@@ -21,21 +21,10 @@
             font="ZoFontWinH4" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL"
             virtual="true" />
 
-        <Label name="TheQuestingGuideGroup_ObjectiveLine" inherits="ZO_Cadwell_StepText"
-            virtual="true">
-            <Dimensions x="475" />
-            <Controls>
-                <Texture name="$(parent)Check" textureFile="EsoUI/Art/Cadwell/check.dds">
-                    <Dimensions x="16" y="16" />
-                    <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" offsetX="-5" offsetY="3" />
-                </Texture>
-            </Controls>
-        </Label>
-
         <TopLevelControl name="TheQuestingGuideGroup_Top" inherits="ZO_RightPanelFootPrint"
             hidden="true">
             <OnInitialized>
-                TheQuestingGuideGroup_Initialize(self, GetString(TQG_TAB_GROUP), "TheQuestingGuideGroup_ObjectiveLine")
+                TheQuestingGuideGroup_Initialize(self, GetString(TQG_TAB_GROUP))
             </OnInitialized>
             <OnEffectivelyShown>
                 TheQuestingGuideGroup_OnShown()
