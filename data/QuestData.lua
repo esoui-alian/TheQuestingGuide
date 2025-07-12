@@ -1,4 +1,4 @@
-local TQG = TheQuestingGuide
+local TQG = TheQuestingGuide or {}
 local strfmt, zStrFmt = string.format, zo_strformat
 
 TQG.Categories = {

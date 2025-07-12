@@ -1,4 +1,4 @@
-﻿local TQG = TheQuestingGuide
+﻿local TQG = TheQuestingGuide or {}
 local LMM = LibMainMenu2
 
 local function CreateOverviewScene()

@@ -289,21 +289,21 @@ end
 
 -- XML Handlers
 function TheQuestingGuideOverview_OnShown() QUESTINGGUIDE_OVERVIEW:OnShown() end
-function TheQuestingGuideOverview_Initialize(control, tabInput, objectiveLinePool)
-    QUESTINGGUIDE_OVERVIEW = TQG_Manager:New(control, tabInput, objectiveLinePool)
+function TheQuestingGuideOverview_Initialize(control, tabInput)
+    QUESTINGGUIDE_OVERVIEW = TQG_Manager:New(control, tabInput)
 end
 
 function TheQuestingGuideClassic_OnShown() QUESTINGGUIDE_CLASSIC:OnShown() end
-function TheQuestingGuideClassic_Initialize(control, tabInput, objectiveLinePool)
-    QUESTINGGUIDE_CLASSIC = TQG_Manager:New(control, tabInput, objectiveLinePool)
+function TheQuestingGuideClassic_Initialize(control, tabInput)
+    QUESTINGGUIDE_CLASSIC = TQG_Manager:New(control, tabInput)
 end
 
 function TheQuestingGuideDLC_OnShown() QUESTINGGUIDE_DLC:OnShown() end
-function TheQuestingGuideDLC_Initialize(control, tabInput, objectiveLinePool)
-    QUESTINGGUIDE_DLC = TQG_Manager:New(control, tabInput, objectiveLinePool)
+function TheQuestingGuideDLC_Initialize(control, tabInput)
+    QUESTINGGUIDE_DLC = TQG_Manager:New(control, tabInput)
 end
 
 function TheQuestingGuideGroup_OnShown() QUESTINGGUIDE_GROUP:OnShown() end
-function TheQuestingGuideGroup_Initialize(control, tabInput, objectiveLinePool)
-    QUESTINGGUIDE_GROUP = TQG_Manager:New(control, tabInput, objectiveLinePool)
+function TheQuestingGuideGroup_Initialize(control, tabInput)
+    QUESTINGGUIDE_GROUP = TQG_Manager:New(control, tabInput)
 end

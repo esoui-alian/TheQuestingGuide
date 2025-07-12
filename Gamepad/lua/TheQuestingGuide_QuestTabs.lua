@@ -1,4 +1,4 @@
-local TQG = TheQuestingGuide
+local TQG = TheQuestingGuide or {}
 local tabTable = {
     ["TheQuestingGuideOverview_Gamepad"] = {
         scene = TQG_OVERVIEW_GAMEPAD_SCENE,

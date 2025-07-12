@@ -1,4 +1,4 @@
-local TQG = TheQuestingGuide
+local TQG = TheQuestingGuide or {}
 
 ------------------------------------
 --LibConsoleDialog Setup
