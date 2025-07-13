@@ -112,7 +112,8 @@ function TQG_Manager:RefreshList()
 
             for zoneIndex = 1, numZones do
                 local zoneName, zoneDescription, zoneOrder = TQG.GetZoneInfo(
-                                                                 self.tab, category,
+                                                                 self.tab,
+                                                                 category,
                                                                  zoneIndex)
 
                 local zoneCompleted = true
@@ -152,7 +153,7 @@ function TQG_Manager:RefreshList()
                                                                        category,
                                                                        zoneIndex,
                                                                        prologueIndex)
-                                                                    
+
                             if not prologue then
                                 break
                             end
@@ -165,10 +166,8 @@ function TQG_Manager:RefreshList()
                     for objectiveIndex = 1, numZoneStoryQuests do
                         local name, openingText, closingText, objectiveOrder,
                               discovered, completed, optional =
-                            TQG.GetZoneStoryQuestInfoForCategoryAndZone(self.tab,
-                                                                        category,
-                                                                        zoneIndex,
-                                                                        objectiveIndex)
+                            TQG.GetZoneStoryQuestInfoForCategoryAndZone(
+                                self.tab, category, zoneIndex, objectiveIndex)
 
                         local objectiveOrder = objectiveIndex +
                                                    numPrologueQuests
@@ -179,7 +178,8 @@ function TQG_Manager:RefreshList()
                     end
                 else
                     local numObjectives =
-                        TQG.GetNumObjectivesForCategoryAndZone(self.tab, category,
+                        TQG.GetNumObjectivesForCategoryAndZone(self.tab,
+                                                               category,
                                                                zoneIndex)
 
                     for objectiveIndex = 1, numObjectives do

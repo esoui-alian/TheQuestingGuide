@@ -21,8 +21,6 @@
             font="ZoFontWinH4" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL"
             virtual="true" />
 
-
-
         <TopLevelControl name="TheQuestingGuideClassic_Top" inherits="ZO_RightPanelFootPrint"
             hidden="true">
             <OnInitialized>
