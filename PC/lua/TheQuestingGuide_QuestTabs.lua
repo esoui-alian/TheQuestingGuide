@@ -1,4 +1,5 @@
 local TQG = TheQuestingGuide or {}
+local strfmt, zStrFmt = string.format, zo_strformat
 
 ---------------------
 -- TQG Manager
@@ -68,7 +69,24 @@ function TQG_Manager:InitializeCategoryList(control)
     local function TreeHeaderSetup(node, control, category, open)
         control.category = category
         control.text:SetModifyTextType(MODIFY_TEXT_TYPE_UPPERCASE)
-        control.text:SetText(TQG.Categories[self.tab][category].name)
+
+        local function AddStoriesNum(catName)
+            local catStoriesNum = TQG.Categories[self.tab][category].catNum
+
+            if catStoriesNum then
+                if type(catStoriesNum) == "number" then
+                    catStoriesNum = strfmt("%01d", catStoriesNum)
+                end
+                catName = strfmt("%s: %s", catStoriesNum, catName)
+            end
+
+            return zStrFmt("<<1>>", catName)
+        end
+
+        local catName = TQG.Categories[self.tab][category].name
+        catName = AddStoriesNum(catName)
+
+        control.text:SetText(catName)
         local down, up, over = GetIconsForQuestingGuideCategoryy(category)
 
         control.icon:SetTexture(open and down or up)

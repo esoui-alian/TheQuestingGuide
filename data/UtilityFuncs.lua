@@ -56,6 +56,14 @@ function TQG.GetZoneInfo(tab, category, zone)
         zoneDescription = zoneDescription:gsub(" II:", ":"):gsub(" I:", ":")
     end
 
+    local zoneStoriesNum = zoneData[tab][category][zone].zoneNum
+    if zoneStoriesNum then
+        if type(zoneStoriesNum) == "number" then
+            zoneStoriesNum = strfmt("%.2f", zoneStoriesNum)
+        end
+        zoneName = strfmt("(%s) %s", zoneStoriesNum, zoneName)
+    end
+
     return zoneName, zoneDescription, zoneCounter
 end
 
@@ -264,7 +272,16 @@ function TQG.GetSelectedZoneId(object)
     for cat = 1, TQG.GetNumCategories(tab) do
         if zoneData[tab][cat][zone] then
             zoneId = zoneData[tab][cat][zone].zoneId
+
+            local zoneStoriesNum = zoneData[tab][cat][zone].zoneNum
             local zoneName = getZoneNameById(zoneId)
+
+            if zoneStoriesNum then
+                if type(zoneStoriesNum) == "number" then
+                    zoneStoriesNum = strfmt("%.2f", zoneStoriesNum)
+                end
+                zoneName = strfmt("(%s) %s", zoneStoriesNum, zoneName)
+            end
 
             if zoneName == selectedData.name then return zoneId end
         end
