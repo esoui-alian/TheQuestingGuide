@@ -78,6 +78,14 @@ function TQG_Manager:InitializeCategoryList(control)
     local function TreeEntryOnSelected(control, data, selected,
                                        reselectingDuringRebuild)
         control:SetSelected(selected)
+
+        local shouldBeVisible = TQG.ShouldZoneStoryKeybindBeVisible(self)
+        if not shouldBeVisible then
+            TQG.HideZoneStoryKeybindButtonGroup(self)
+        else
+            TQG.ShowZoneStoryKeybindButtonGroup(self)
+        end
+
         if selected and not reselectingDuringRebuild then
             self:RefreshDetails()
         end

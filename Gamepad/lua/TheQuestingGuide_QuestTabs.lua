@@ -1,18 +1,22 @@
 local TQG = TheQuestingGuide or {}
 local tabTable = {
     ["TheQuestingGuideOverview_Gamepad"] = {
+        name = GetString(TQG_TAB_OVERVIEW),
         scene = TQG_OVERVIEW_GAMEPAD_SCENE,
         tab = GetString(TQG_TAB_OVERVIEW)
     },
     ["TheQuestingGuideClassic_Gamepad"] = {
+        name = GetString(TQG_TAB_CLASSIC),
         scene = TQG_CLASSIC_GAMEPAD_SCENE,
         tab = GetString(TQG_TAB_CLASSIC)
     },
     ["TheQuestingGuideDLC_Gamepad"] = {
+        name = GetString(TQG_TAB_DLC),
         scene = TQG_DLC_GAMEPAD_SCENE,
         tab = GetString(TQG_TAB_DLC)
     },
     ["TheQuestingGuideGroup_Gamepad"] = {
+        name = GetString(TQG_TAB_GROUP),
         scene = TQG_GROUP_GAMEPAD_SCENE,
         tab = GetString(TQG_TAB_GROUP)
     }
@@ -38,7 +42,7 @@ function TheQuestingGuideManager_Gamepad:Initialize(control)
     self.tab = tabTable[controlName].tab
     self.itemList = self:GetMainList()
 
-    self.headerData = {titleText = GetString(TQG_TAB_CLASSIC)}
+    self.headerData = {titleText = tabTable[controlName].name}
     ZO_GamepadGenericHeader_Refresh(self.header, self.headerData)
 end
 

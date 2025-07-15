@@ -10,94 +10,6 @@ local LMM = LibMainMenu2
 -- Keybinds Setup
 ------------------------------------
 
-local function GetPlayStoryButtonText(zoneId)
-    if zoneId then
-        if not ZONE_STORIES_KEYBOARD.IsZoneCollectibleUnlocked(zoneId) then
-            return ZONE_STORIES_KEYBOARD.GetZoneCollectibleUnlockText(zoneId)
-        elseif ZONE_STORIES_MANAGER.IsZoneComplete(zoneId) then
-            return zo_strformat(SI_ZONE_STORY_ZONE_COMPLETE_ACTION)
-        elseif ZONE_STORIES_MANAGER.IsZoneCompletionTypeComplete(zoneId,
-                                                                 ZONE_COMPLETION_TYPE_PRIORITY_QUESTS) or
-            not CanZoneStoryContinueTrackingActivitiesForCompletionType(zoneId,
-                                                                        ZONE_COMPLETION_TYPE_PRIORITY_QUESTS) then
-            return zo_strformat(SI_ZONE_STORY_EXPLORE_ZONE_ACTION)
-        elseif not IsZoneStoryStarted(zoneId) then
-            return zo_strformat(SI_ZONE_STORY_START_STORY_ACTION)
-        else
-            return zo_strformat(SI_ZONE_STORY_CONTINUE_STORY_ACTION)
-        end
-    end
-    return "<EMPTY>"
-end
-
-local function UpdatePlayStoryButtonText(zoneId)
-    local zoneId = 381
-    local isZoneAvailable = ZONE_STORIES_MANAGER.GetZoneAvailability(zoneId)
-    local canContinueZone = CanZoneStoryContinueTrackingActivities(zoneId)
-    local playStoryButtonText = GetPlayStoryButtonText()
-end
-
-local function TrackNextActivity()
-    local zoneId = 381
-    if ZONE_STORIES_KEYBOARD.IsZoneCollectibleUnlocked(zoneId) then
-        local SET_AUTO_MAP_NAVIGATION_TARGET = true
-        local COMPLETION_TYPE_ALL = nil
-        TrackNextActivityForZoneStory(zoneId, COMPLETION_TYPE_ALL,
-                                      SET_AUTO_MAP_NAVIGATION_TARGET)
-    else
-        local lockedZoneCollectibleId = GetCollectibleIdForZone(GetZoneIndex(
-                                                                    zoneId))
-        local collectibleData =
-            ZO_COLLECTIBLE_DATA_MANAGER:GetCollectibleDataById(
-                lockedZoneCollectibleId)
-        local categoryType = collectibleData:GetCategoryType()
-        if categoryType == COLLECTIBLE_CATEGORY_TYPE_CHAPTER then
-            ZO_ShowChapterUpgradePlatformScreen(
-                MARKET_OPEN_OPERATION_ZONE_STORIES)
-        else
-            local searchTerm = zo_strformat(SI_CROWN_STORE_SEARCH_FORMAT_STRING,
-                                            collectibleData:GetName())
-            ShowMarketAndSearch(searchTerm, MARKET_OPEN_OPERATION_ZONE_STORIES)
-        end
-    end
-
-end
-
-local function GetSelectedDataForZone(object)
-    local selectedData = object.navigationTree:GetSelectedData()
-    if not selectedData then return end
-
-    local tab = object.tab
-    local zoneIndex = selectedData.order
-
-    if selectedData and tab and zoneIndex then
-        return selectedData, tab, zoneIndex
-    end
-end
-
-local getZoneNameById = GetZoneNameById
-local function GetSelectedZoneId(object)
-    local selectedData, tab, zoneIndex = GetSelectedDataForZone(object)
-    if not GetSelectedDataForZone(object) then return end
-
-    local selectedData = object.navigationTree:GetSelectedData()
-    local tab, zoneId = object.tab
-    local zone = selectedData.order
-    local zoneData = TQG.Zones
-
-    for cat = 1, TQG.GetNumCategories(tab) do
-        if zoneData[tab][cat][zone] then
-            zoneId = zoneData[tab][cat][zone].zoneId
-            local zoneName = getZoneNameById(zoneId)
-
-            if zoneName == selectedData.name then return zoneId end
-        end
-    end
-
-    return
-end
-
-local isZoneStoryZoneAvailable = IsZoneStoryZoneAvailable
 local tqgClassicKeybindDescriptor = {
     {
         alignment = KEYBIND_STRIP_ALIGN_RIGHT,
@@ -105,7 +17,7 @@ local tqgClassicKeybindDescriptor = {
         keybind = "UI_SHORTCUT_PRIMARY",
         visible = function() return true end,
         callback = function()
-            local zoneId = GetSelectedZoneId(QUESTINGGUIDE_CLASSIC)
+            local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_CLASSIC)
 
             GROUP_MENU_KEYBOARD:ShowCategory(ZONE_STORIES_FRAGMENT)
             ZONE_STORIES_KEYBOARD:SetSelectedByZoneId(zoneId)
@@ -120,13 +32,33 @@ local tqgDLCKeybindDescriptor = {
         keybind = "UI_SHORTCUT_PRIMARY",
         visible = function() return true end,
         callback = function()
-            local zoneId = GetSelectedZoneId(QUESTINGGUIDE_DLC)
-
+            local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_DLC)
+            d(zoneId)
             GROUP_MENU_KEYBOARD:ShowCategory(ZONE_STORIES_FRAGMENT)
             ZONE_STORIES_KEYBOARD:SetSelectedByZoneId(zoneId)
         end
     }
 }
+
+TQG.Keybinds = {
+    [GetString(TQG_TAB_CLASSIC)] = tqgClassicKeybindDescriptor,
+    [GetString(TQG_TAB_DLC)] = tqgDLCKeybindDescriptor
+}
+
+function TQG.HideZoneStoryKeybindButtonGroup(object)
+    local keybindDescriptor = TQG.Keybinds[object.tab]
+    KEYBIND_STRIP:RemoveKeybindButtonGroup(keybindDescriptor)
+end
+
+function TQG.ShowZoneStoryKeybindButtonGroup(object)
+    local keybindDescriptor = TQG.Keybinds[object.tab]
+    KEYBIND_STRIP:AddKeybindButtonGroup(keybindDescriptor)
+end
+
+function TQG.ShouldZoneStoryKeybindBeVisible(object, data)
+    local zoneId = TQG.GetSelectedZoneId(object)
+    return ZONE_STORIES_MANAGER:GetZoneData(zoneId) ~= nil
+end
 
 ------------------------------------
 -- Create Scenes
@@ -204,8 +136,7 @@ local function CreateDLCScene()
     TQG_DLC_FRAGMENT = ZO_HUDFadeSceneFragment:New(TheQuestingGuideDLC_Top)
     TQG_DLC_SCENE:AddFragment(TQG_DLC_FRAGMENT)
 
-    TQG_DLC_SCENE:RegisterCallback("StateChange",
-                                       function(oldState, newState)
+    TQG_DLC_SCENE:RegisterCallback("StateChange", function(oldState, newState)
         if newState == SCENE_SHOWING then
             KEYBIND_STRIP:AddKeybindButtonGroup(tqgDLCKeybindDescriptor)
         elseif newState == SCENE_HIDING then

@@ -235,3 +235,40 @@ function TQG.GetObjectiveInfoForCategoryAndZone(tab, category, zone, objective)
     return questName, openingText, closingText, objective, discovered,
            completed, optional, prologue
 end
+
+------------------------------------
+-- Keybinds Setup: Shared
+------------------------------------
+
+local function GetSelectedDataForZone(object)
+    local selectedData = object.navigationTree:GetSelectedData()
+    if not selectedData then return end
+
+    local tab = object.tab
+    local zoneIndex = selectedData.order
+
+    if selectedData and tab and zoneIndex then
+        return selectedData, tab, zoneIndex
+    end
+end
+
+local getZoneNameById = GetZoneNameById
+function TQG.GetSelectedZoneId(object)
+    local selectedData, tab, zoneIndex = GetSelectedDataForZone(object)
+    if not selectedData then return end
+
+    local tab, zoneId = object.tab
+    local zone = selectedData.order
+    local zoneData = TQG.Zones
+
+    for cat = 1, TQG.GetNumCategories(tab) do
+        if zoneData[tab][cat][zone] then
+            zoneId = zoneData[tab][cat][zone].zoneId
+            local zoneName = getZoneNameById(zoneId)
+
+            if zoneName == selectedData.name then return zoneId end
+        end
+    end
+
+    return
+end
