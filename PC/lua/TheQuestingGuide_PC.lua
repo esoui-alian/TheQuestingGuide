@@ -14,8 +14,12 @@ local tqgClassicKeybindDescriptor = {
     {
         alignment = KEYBIND_STRIP_ALIGN_RIGHT,
         name = GetString(SI_ZONE_STORY_INFO_HEADER),
-        keybind = "UI_SHORTCUT_PRIMARY",
+        keybind = "UI_SHORTCUT_SECONDARY",
         visible = function() return true end,
+        enabled = function()
+            local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_CLASSIC)
+            return ZONE_STORIES_MANAGER:GetZoneData(zoneId) ~= nil
+        end,
         callback = function()
             local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_CLASSIC)
 
@@ -26,16 +30,42 @@ local tqgClassicKeybindDescriptor = {
 }
 
 local tqgDLCKeybindDescriptor = {
+    -- Opens to Zone Guide where Zone is Valid for Zone Guide
     {
         alignment = KEYBIND_STRIP_ALIGN_RIGHT,
         name = GetString(SI_ZONE_STORY_INFO_HEADER),
-        keybind = "UI_SHORTCUT_PRIMARY",
+        keybind = "UI_SHORTCUT_SECONDARY",
         visible = function() return true end,
+        enabled = function()
+            local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_DLC)
+            return ZONE_STORIES_MANAGER:GetZoneData(zoneId) ~= nil
+        end,
         callback = function()
             local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_DLC)
-            d(zoneId)
+
             GROUP_MENU_KEYBOARD:ShowCategory(ZONE_STORIES_FRAGMENT)
             ZONE_STORIES_KEYBOARD:SetSelectedByZoneId(zoneId)
+        end
+    }, -- Opens to DLC Collections Menu
+    {
+        alignment = KEYBIND_STRIP_ALIGN_RIGHT,
+        name = GetString(SI_MAIN_MENU_COLLECTIONS),
+        keybind = "UI_SHORTCUT_PRIMARY",
+        visible = function() return true end,
+        enabled = function()
+            local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_DLC)
+            local zoneIndex = GetZoneIndex(zoneId)
+            local collectibleId = GetCollectibleIdForZone(zoneIndex)
+
+            local collectibleCategoryType =
+                GetCollectibleCategoryType(collectibleId)
+            return collectibleCategoryType == COLLECTIBLE_CATEGORY_TYPE_DLC
+        end,
+        callback = function()
+            local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_DLC)
+            local zoneIndex = GetZoneIndex(zoneId)
+            local collectibleId = GetCollectibleIdForZone(zoneIndex)
+            DLC_BOOK_KEYBOARD:BrowseToCollectible(collectibleId)
         end
     }
 }
@@ -44,21 +74,6 @@ TQG.Keybinds = {
     [GetString(TQG_TAB_CLASSIC)] = tqgClassicKeybindDescriptor,
     [GetString(TQG_TAB_DLC)] = tqgDLCKeybindDescriptor
 }
-
-function TQG.HideZoneStoryKeybindButtonGroup(object)
-    local keybindDescriptor = TQG.Keybinds[object.tab]
-    KEYBIND_STRIP:RemoveKeybindButtonGroup(keybindDescriptor)
-end
-
-function TQG.ShowZoneStoryKeybindButtonGroup(object)
-    local keybindDescriptor = TQG.Keybinds[object.tab]
-    KEYBIND_STRIP:AddKeybindButtonGroup(keybindDescriptor)
-end
-
-function TQG.ShouldZoneStoryKeybindBeVisible(object, data)
-    local zoneId = TQG.GetSelectedZoneId(object)
-    return ZONE_STORIES_MANAGER:GetZoneData(zoneId) ~= nil
-end
 
 ------------------------------------
 -- Create Scenes
@@ -113,6 +128,7 @@ local function CreateClassicScene()
         elseif newState == SCENE_HIDING then
             KEYBIND_STRIP:RemoveKeybindButtonGroup(tqgClassicKeybindDescriptor)
         end
+
     end)
 
 end

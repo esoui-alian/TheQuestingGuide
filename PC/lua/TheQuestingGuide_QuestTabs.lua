@@ -46,6 +46,16 @@ function TQG_Manager:New(control, tabInput, objectiveLinePool)
     return manager
 end
 
+function TQG_Manager:ShowOrHideZoneStoryKeybind()
+    local shouldBeVisible = TQG.ShouldZoneStoryKeybindBeVisible(self)
+
+    if not shouldBeVisible then
+        TQG.HideZoneStoryKeybindButtonGroup(self)
+    else
+        TQG.ShowZoneStoryKeybindButtonGroup(self)
+    end
+end
+
 function TQG_Manager:InitializeCategoryList(control)
     self.navigationTree = ZO_Tree:New(control:GetNamedChild(
                                           "NavigationContainerScrollChild"), 60,
@@ -79,12 +89,7 @@ function TQG_Manager:InitializeCategoryList(control)
                                        reselectingDuringRebuild)
         control:SetSelected(selected)
 
-        local shouldBeVisible = TQG.ShouldZoneStoryKeybindBeVisible(self)
-        if not shouldBeVisible then
-            TQG.HideZoneStoryKeybindButtonGroup(self)
-        else
-            TQG.ShowZoneStoryKeybindButtonGroup(self)
-        end
+        KEYBIND_STRIP:UpdateKeybindButtonGroup(TQG.Keybinds[self.tab])
 
         if selected and not reselectingDuringRebuild then
             self:RefreshDetails()
