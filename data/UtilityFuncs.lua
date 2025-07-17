@@ -96,7 +96,7 @@ end
 local function GetUESPLocationInfo(questId, questName, discovered,
                                    isOpeningText, isClosingText)
     if not LibUespQuestData then return end
-
+    
     if questId then
         if isOpeningText then
             if discovered then
@@ -148,12 +148,7 @@ local function GetObjectiveInfo(questId, openingText, closingText, questName,
     local _, objectiveName = GetCompletedQuestLocationInfo(questId)
 
     local openingUESP = GetUESPLocationInfo(questId, _, discovered, true)
-    local openingText = openingText or openingUESP or ""
-
-    local _, journalIndex = IsQuestinJournal(questName)
-    if discovered and (not completed) and journalIndex and journalIndex > 0 then
-        openingText = select(2, GetJournalQuestInfo(journalIndex))
-    end
+    local openingText = discovered == false and openingText or openingUESP or ""
 
     local closingUESP = GetUESPLocationInfo(questId, _, discovered, false, true)
     local closingText = closingText or closingUESP or ""
@@ -165,6 +160,10 @@ local function GetObjectiveInfo(questId, openingText, closingText, questName,
         closingText = (objectiveName ~= "" and objectiveName) or
                           (zoneName ~= "" and zoneName) or "No Closing Text"
     end
+
+                if questId == 5071 then
+                    d(openingText)
+                end
 
     return questName, openingText, closingText, discovered, completed
 end
@@ -183,16 +182,12 @@ function TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category, zone,
     local completed = isZoneStoryActivityComplete(zoneId,
                                                   ZONE_COMPLETION_TYPE_PRIORITY_QUESTS,
                                                   objective)
-    local discovered, journalIndex = completed or IsQuestinJournal(questName)
+    local discovered = completed or IsQuestinJournal(questName)
 
-    local openingText = GetUESPLocationInfo(_, questName, discovered, true) or
-                            ""
-    if discovered and (not completed) and journalIndex and journalIndex > 0 then
-        openingText = select(2, GetJournalQuestInfo(journalIndex))
-    end
-
-    local closingText = GetUESPLocationInfo(_, questName, discovered, false,
-                                            true) or ""
+    local openingText, closingText
+    openingText = GetUESPLocationInfo(_, questName, discovered, true) or ""
+    closingText = GetUESPLocationInfo(_, questName, discovered, false, true) or
+                      ""
 
     if openingText == "" then openingText = "No Opening Text" end
     if closingText == "" then closingText = "No Closing Text" end
