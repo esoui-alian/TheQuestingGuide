@@ -64,7 +64,7 @@ function TQG.GetZoneInfo(tab, category, zone)
         zoneName = strfmt("(%s) %s", zoneStoriesNum, zoneName)
     end
 
-    return zoneName, zoneDescription, zoneCounter
+    return zoneName, zoneDescription, zoneCounter, zoneId
 end
 
 function TQG.GetNumZonesForCategory(tab, category)
@@ -89,7 +89,7 @@ local function IsQuestinJournal(questName)
 
     for i = 1, getNumJournalQuests() do
         local journalQuestName = GetJournalQuestInfo(i)
-        if journalQuestName == questName then return true end
+        if journalQuestName == questName then return true, i end
     end
 end
 
@@ -137,16 +137,23 @@ local function GetUESPLocationInfo(questId, questName, discovered,
     end
 end
 
-local function GetObjectiveInfo(questId, openingText, closingText)
-    local questName = getQuestName(questId) ~= "" and getQuestName(questId) or
-                          "Unknown Quest"
-    local completed = getCompletedQuestInfo(questId) ~= "" or false
-    local discovered = completed or IsQuestinJournal(questName)
+local function GetObjectiveInfo(questId, openingText, closingText, questName,
+                                discovered)
+    local questName = questName or getQuestName(questId) ~= "" and
+                          getQuestName(questId) or "Unknown Quest"
+    local completed = getCompletedQuestInfo(questId) ~= ""
+
+    local discovered = discovered or completed or IsQuestinJournal(questName)
     local zoneName = GetZoneNameById(GetQuestZoneId(questId))
     local _, objectiveName = GetCompletedQuestLocationInfo(questId)
 
     local openingUESP = GetUESPLocationInfo(questId, _, discovered, true)
     local openingText = openingText or openingUESP or ""
+
+    local _, journalIndex = IsQuestinJournal(questName)
+    if discovered and (not completed) and journalIndex and journalIndex > 0 then
+        openingText = select(2, GetJournalQuestInfo(journalIndex))
+    end
 
     local closingUESP = GetUESPLocationInfo(questId, _, discovered, false, true)
     local closingText = closingText or closingUESP or ""
@@ -176,10 +183,14 @@ function TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category, zone,
     local completed = isZoneStoryActivityComplete(zoneId,
                                                   ZONE_COMPLETION_TYPE_PRIORITY_QUESTS,
                                                   objective)
-    local discovered = completed or IsQuestinJournal(questName)
+    local discovered, journalIndex = completed or IsQuestinJournal(questName)
 
     local openingText = GetUESPLocationInfo(_, questName, discovered, true) or
                             ""
+    if discovered and (not completed) and journalIndex and journalIndex > 0 then
+        openingText = select(2, GetJournalQuestInfo(journalIndex))
+    end
+
     local closingText = GetUESPLocationInfo(_, questName, discovered, false,
                                             true) or ""
 
@@ -230,12 +241,22 @@ function TQG.GetObjectiveInfoForCategoryAndZone(tab, category, zone, objective)
 
     local objectiveData = objData[tab][category][zone][objective]
 
+    local completed
     local questId = objectiveData.questId
     local openingText = objectiveData.openingText
     local closingText = objectiveData.closingText
 
-    local questName, openingText, closingText, discovered, completed =
-        GetObjectiveInfo(questId, openingText, closingText)
+    local questName = objData[tab][category][zone][objective].questName
+    local discovered = objData[tab][category][zone][objective].discovered
+
+    questName, openingText, closingText, discovered, completed =
+        GetObjectiveInfo(questId, openingText, closingText, questName,
+                         discovered)
+
+    if openingText == "No Opening Text" then
+        local zoneId = zoneData[tab][category][zone].zoneId
+        openingText = GetZoneNameById(zoneId)
+    end
 
     local optional = objData[tab][category][zone][objective].optional
     local prologue = objData[tab][category][zone][objective].prologue
@@ -248,44 +269,9 @@ end
 -- Keybinds Setup: Shared
 ------------------------------------
 
-local function GetSelectedDataForZone(object)
+function TQG.GetSelectedZoneId(object)
     local selectedData = object.navigationTree:GetSelectedData()
     if not selectedData then return end
 
-    local tab = object.tab
-    local zoneIndex = selectedData.order
-
-    if selectedData and tab and zoneIndex then
-        return selectedData, tab, zoneIndex
-    end
-end
-
-local getZoneNameById = GetZoneNameById
-function TQG.GetSelectedZoneId(object)
-    local selectedData, tab, zoneIndex = GetSelectedDataForZone(object)
-    if not selectedData then return end
-
-    local tab, zoneId = object.tab
-    local zone = selectedData.order
-    local zoneData = TQG.Zones
-
-    for cat = 1, TQG.GetNumCategories(tab) do
-        if zoneData[tab][cat][zone] then
-            zoneId = zoneData[tab][cat][zone].zoneId
-
-            local zoneStoriesNum = zoneData[tab][cat][zone].zoneNum
-            local zoneName = getZoneNameById(zoneId)
-
-            if zoneStoriesNum then
-                if type(zoneStoriesNum) == "number" then
-                    zoneStoriesNum = strfmt("%.2f", zoneStoriesNum)
-                end
-                zoneName = strfmt("(%s) %s", zoneStoriesNum, zoneName)
-            end
-
-            if zoneName == selectedData.name then return zoneId end
-        end
-    end
-
-    return
+    return selectedData.zoneId
 end

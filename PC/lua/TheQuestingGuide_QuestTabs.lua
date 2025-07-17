@@ -142,7 +142,7 @@ function TQG_Manager:RefreshList()
                 self.navigationTree:AddNode("ZO_IconHeader", category)
 
             for zoneIndex = 1, numZones do
-                local zoneName, zoneDescription, zoneOrder = TQG.GetZoneInfo(
+                local zoneName, zoneDescription, zoneOrder, zoneId = TQG.GetZoneInfo(
                                                                  self.tab,
                                                                  category,
                                                                  zoneIndex)
@@ -232,6 +232,7 @@ function TQG_Manager:RefreshList()
 
                 table.insert(zones, {
                     name = zoneName,
+                    zoneId = zoneId,
                     description = zoneDescription,
                     order = zoneOrder,
                     completed = zoneCompleted,
@@ -280,22 +281,28 @@ function TQG_Manager:RefreshDetails()
         local objectiveInfo = selectedData.objectives[i]
         local objectiveLine = self.objectiveLinePool:AcquireObject()
 
+        local OBJECTIVE_FORMAT = SI_CADWELL_OBJECTIVE_FORMAT
+
+        if self.tab == GetString(TQG_TAB_OVERVIEW) then
+            OBJECTIVE_FORMAT = "<<2>>"
+        end
+
         if objectiveInfo.discovered and not objectiveInfo.completed then
             objectiveLine:SetColor(ZO_SELECTED_TEXT:UnpackRGBA())
             GetControl(objectiveLine, "Check"):SetHidden(true)
-            objectiveLine:SetText(zo_strformat(SI_CADWELL_OBJECTIVE_FORMAT,
+            objectiveLine:SetText(zo_strformat(OBJECTIVE_FORMAT,
                                                objectiveInfo.name,
                                                objectiveInfo.openingText))
         elseif not objectiveInfo.discovered then
             objectiveLine:SetColor(ZO_DISABLED_TEXT:UnpackRGBA())
             GetControl(objectiveLine, "Check"):SetHidden(true)
-            objectiveLine:SetText(zo_strformat(SI_CADWELL_OBJECTIVE_FORMAT,
+            objectiveLine:SetText(zo_strformat(OBJECTIVE_FORMAT,
                                                objectiveInfo.name,
                                                objectiveInfo.openingText))
         else
             objectiveLine:SetColor(ZO_NORMAL_TEXT:UnpackRGBA())
             GetControl(objectiveLine, "Check"):SetHidden(false)
-            objectiveLine:SetText(zo_strformat(SI_CADWELL_OBJECTIVE_FORMAT,
+            objectiveLine:SetText(zo_strformat(OBJECTIVE_FORMAT,
                                                objectiveInfo.name,
                                                objectiveInfo.closingText))
         end

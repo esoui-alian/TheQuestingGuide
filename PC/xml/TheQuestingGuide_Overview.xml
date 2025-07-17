@@ -50,7 +50,7 @@
                 <Control name="$(parent)ZoneInfoContainer" inherits="ZO_ScrollContainer">
                     <Dimensions x="550" />
                     <Anchor point="TOPRIGHT" offsetX="-33" offsetY="60" />
-                    <Anchor point="BOTTOMRIGHT" relativePoint="RIGHT" offsetX="-33" offsetY="100" />
+                    <Anchor point="BOTTOMRIGHT" relativePoint="RIGHT" offsetX="-33" offsetY="75" />
                 </Control>
 
                 <Label name="$(parent)TitleText" font="ZoFontWinH2" modifyTextType="UPPERCASE"

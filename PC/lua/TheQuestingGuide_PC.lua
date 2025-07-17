@@ -70,9 +70,51 @@ local tqgDLCKeybindDescriptor = {
     }
 }
 
+local tqgGroupKeybindDescriptor = {
+    -- Opens to Zone Guide where Zone is Valid for Zone Guide
+    {
+        alignment = KEYBIND_STRIP_ALIGN_RIGHT,
+        name = GetString(SI_ZONE_STORY_INFO_HEADER),
+        keybind = "UI_SHORTCUT_SECONDARY",
+        visible = function() return true end,
+        enabled = function()
+            local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_GROUP)
+            return ZONE_STORIES_MANAGER:GetZoneData(zoneId) ~= nil
+        end,
+        callback = function()
+            local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_GROUP)
+
+            GROUP_MENU_KEYBOARD:ShowCategory(ZONE_STORIES_FRAGMENT)
+            ZONE_STORIES_KEYBOARD:SetSelectedByZoneId(zoneId)
+        end
+    }, -- Opens to DLC Collections Menu
+    {
+        alignment = KEYBIND_STRIP_ALIGN_RIGHT,
+        name = GetString(SI_MAIN_MENU_COLLECTIONS),
+        keybind = "UI_SHORTCUT_PRIMARY",
+        visible = function() return true end,
+        enabled = function()
+            local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_GROUP)
+            local zoneIndex = GetZoneIndex(zoneId)
+            local collectibleId = GetCollectibleIdForZone(zoneIndex)
+
+            local collectibleCategoryType =
+                GetCollectibleCategoryType(collectibleId)
+            return collectibleCategoryType == COLLECTIBLE_CATEGORY_TYPE_DLC
+        end,
+        callback = function()
+            local zoneId = TQG.GetSelectedZoneId(QUESTINGGUIDE_GROUP)
+            local zoneIndex = GetZoneIndex(zoneId)
+            local collectibleId = GetCollectibleIdForZone(zoneIndex)
+            DLC_BOOK_KEYBOARD:BrowseToCollectible(collectibleId)
+        end
+    }
+}
+
 TQG.Keybinds = {
     [GetString(TQG_TAB_CLASSIC)] = tqgClassicKeybindDescriptor,
-    [GetString(TQG_TAB_DLC)] = tqgDLCKeybindDescriptor
+    [GetString(TQG_TAB_DLC)] = tqgDLCKeybindDescriptor,
+    [GetString(TQG_TAB_GROUP)] = tqgGroupKeybindDescriptor
 }
 
 ------------------------------------
@@ -180,6 +222,15 @@ local function CreateGroupScene()
 
     TQG_GROUP_FRAGMENT = ZO_HUDFadeSceneFragment:New(TheQuestingGuideGroup_Top)
     TQG_GROUP_SCENE:AddFragment(TQG_GROUP_FRAGMENT)
+
+    TQG_GROUP_SCENE:RegisterCallback("StateChange", function(oldState, newState)
+        if newState == SCENE_SHOWING then
+            KEYBIND_STRIP:AddKeybindButtonGroup(tqgGroupKeybindDescriptor)
+        elseif newState == SCENE_HIDING then
+            KEYBIND_STRIP:RemoveKeybindButtonGroup(tqgGroupKeybindDescriptor)
+        end
+
+    end)
 
 end
 
