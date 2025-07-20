@@ -282,7 +282,7 @@ function TQG_Manager:RefreshDetails()
 
         local OBJECTIVE_FORMAT = SI_CADWELL_OBJECTIVE_FORMAT
 
-        if self.tab == GetString(TQG_TAB_OVERVIEW) then
+        if (not objectiveInfo.name) or objectiveInfo.name == "" then
             OBJECTIVE_FORMAT = "<<2>>"
         end
 

@@ -138,9 +138,9 @@ local function GetUESPLocationInfo(questId, questName, discovered,
 end
 
 local function GetObjectiveInfo(questId, openingText, closingText, questName,
-                                discovered)
+                                discovered, tab)
     local questName = questName or getQuestName(questId) ~= "" and
-                          getQuestName(questId) or "Unknown Quest"
+                          getQuestName(questId) or ""
     local completed = getCompletedQuestInfo(questId) ~= ""
 
     local discovered = discovered or completed or IsQuestinJournal(questName)
@@ -148,7 +148,9 @@ local function GetObjectiveInfo(questId, openingText, closingText, questName,
     local _, objectiveName = GetCompletedQuestLocationInfo(questId)
 
     local openingUESP = GetUESPLocationInfo(questId, _, discovered, true)
-    local openingText = ((not discovered) and openingText) or openingUESP or ""
+    local openingText = ((not discovered) and openingText) or
+                            (tab == GetString(TQG_TAB_OVERVIEW) and openingText) or
+                            openingUESP or ""
 
     local closingUESP = GetUESPLocationInfo(questId, _, discovered, false, true)
     local closingText = closingText or closingUESP or ""
@@ -187,7 +189,6 @@ function TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category, zone,
                                                   ZONE_COMPLETION_TYPE_PRIORITY_QUESTS,
                                                   objective)
     local discovered = completed or IsQuestinJournal(questName)
-    
     openingText = GetUESPLocationInfo(_, questName, discovered, true) or
                       blockingText or ""
     closingText = GetUESPLocationInfo(_, questName, discovered, false, true) or
@@ -196,7 +197,7 @@ function TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category, zone,
     if openingText == "" then openingText = "No Opening Text" end
     if closingText == "" then closingText = "No Closing Text" end
     local optional = false
-    
+
     return questName, openingText, closingText, objective, discovered,
            completed, optional, openingText == blockingText
 end
@@ -250,7 +251,7 @@ function TQG.GetObjectiveInfoForCategoryAndZone(tab, category, zone, objective)
 
     questName, openingText, closingText, discovered, completed =
         GetObjectiveInfo(questId, openingText, closingText, questName,
-                         discovered)
+                         discovered, tab)
 
     if openingText == "No Opening Text" then
         local zoneId = zoneData[tab][category][zone].zoneId
