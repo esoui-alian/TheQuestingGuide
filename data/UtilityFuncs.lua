@@ -96,7 +96,7 @@ end
 local function GetUESPLocationInfo(questId, questName, discovered,
                                    isOpeningText, isClosingText)
     if not LibUespQuestData then return end
-    
+
     if questId then
         if isOpeningText then
             if discovered then
@@ -148,7 +148,7 @@ local function GetObjectiveInfo(questId, openingText, closingText, questName,
     local _, objectiveName = GetCompletedQuestLocationInfo(questId)
 
     local openingUESP = GetUESPLocationInfo(questId, _, discovered, true)
-    local openingText = discovered == false and openingText or openingUESP or ""
+    local openingText = ((not discovered) and openingText) or openingUESP or ""
 
     local closingUESP = GetUESPLocationInfo(questId, _, discovered, false, true)
     local closingText = closingText or closingUESP or ""
@@ -161,10 +161,6 @@ local function GetObjectiveInfo(questId, openingText, closingText, questName,
                           (zoneName ~= "" and zoneName) or "No Closing Text"
     end
 
-                if questId == 5071 then
-                    d(openingText)
-                end
-
     return questName, openingText, closingText, discovered, completed
 end
 
@@ -176,6 +172,14 @@ function TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category, zone,
     end
 
     local zoneId = zoneData[tab][category][zone].zoneId
+
+    local blockingBranchErrorStringId = select(4,
+                                               ZONE_STORIES_MANAGER.GetActivityCompletionProgressValuesAndText(
+                                                   zoneId,
+                                                   ZONE_COMPLETION_TYPE_PRIORITY_QUESTS))
+    local blockingText = GetErrorString(blockingBranchErrorStringId) ~= "" and
+                             GetErrorString(blockingBranchErrorStringId) or nil
+
     local questName = getZoneStoryActivityNameByActivityIndex(zoneId,
                                                               ZONE_COMPLETION_TYPE_PRIORITY_QUESTS,
                                                               objective)
@@ -183,18 +187,18 @@ function TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category, zone,
                                                   ZONE_COMPLETION_TYPE_PRIORITY_QUESTS,
                                                   objective)
     local discovered = completed or IsQuestinJournal(questName)
-
-    local openingText, closingText
-    openingText = GetUESPLocationInfo(_, questName, discovered, true) or ""
+    
+    openingText = GetUESPLocationInfo(_, questName, discovered, true) or
+                      blockingText or ""
     closingText = GetUESPLocationInfo(_, questName, discovered, false, true) or
-                      ""
+                      blockingText or ""
 
     if openingText == "" then openingText = "No Opening Text" end
     if closingText == "" then closingText = "No Closing Text" end
     local optional = false
-
+    
     return questName, openingText, closingText, objective, discovered,
-           completed, optional
+           completed, optional, openingText == blockingText
 end
 
 function TQG.DoesZoneHavePrologue(tab, category, zone)

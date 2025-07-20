@@ -201,7 +201,7 @@ function ZO_Tooltip:LayoutTheQuestingGuide(category, zoneIndex, tab)
         end
         for objectiveIndex = 1, numZoneStoryQuests do
             local name, openingText, closingText, objectiveOrder, discovered,
-                  completed, optional =
+                  completed, optional, hasBlockingText =
                 TQG.GetZoneStoryQuestInfoForCategoryAndZone(tab, category,
                                                             zoneIndex,
                                                             objectiveIndex)
@@ -210,6 +210,8 @@ function ZO_Tooltip:LayoutTheQuestingGuide(category, zoneIndex, tab)
 
             AddObjective(name, openingText, closingText, objectiveOrder,
                          discovered, completed, optional)
+
+            if hasBlockingText then break end
         end
     else
         local numObjectives = TQG.GetNumObjectivesForCategoryAndZone(tab,

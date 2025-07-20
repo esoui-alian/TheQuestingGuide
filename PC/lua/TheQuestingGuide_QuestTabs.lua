@@ -39,10 +39,9 @@ function TQG_Manager:New(control, tabInput, objectiveLinePool)
 
     local function RefreshQuestStates(event) manager:RefreshList() end
 
+    control:RegisterForEvent(EVENT_QUEST_ADDED, RefreshQuestStates)
     control:RegisterForEvent(EVENT_QUEST_REMOVED, RefreshQuestStates)
-    -- control:RegisterForEvent(EVENT_POI_UPDATED, OnPOIUpdated)
-    -- control:RegisterForEvent(EVENT_CADWELL_PROGRESSION_LEVEL_CHANGED,
-    --                         OnCadwellCategoryChanged)
+    control:RegisterForEvent(EVENT_QUEST_COMPLETE, RefreshQuestStates)
 
     return manager
 end
@@ -142,10 +141,8 @@ function TQG_Manager:RefreshList()
                 self.navigationTree:AddNode("ZO_IconHeader", category)
 
             for zoneIndex = 1, numZones do
-                local zoneName, zoneDescription, zoneOrder, zoneId = TQG.GetZoneInfo(
-                                                                 self.tab,
-                                                                 category,
-                                                                 zoneIndex)
+                local zoneName, zoneDescription, zoneOrder, zoneId =
+                    TQG.GetZoneInfo(self.tab, category, zoneIndex)
 
                 local zoneCompleted = true
 
@@ -196,7 +193,7 @@ function TQG_Manager:RefreshList()
                     end
                     for objectiveIndex = 1, numZoneStoryQuests do
                         local name, openingText, closingText, objectiveOrder,
-                              discovered, completed, optional =
+                              discovered, completed, optional, hasBlockingText =
                             TQG.GetZoneStoryQuestInfoForCategoryAndZone(
                                 self.tab, category, zoneIndex, objectiveIndex)
 
@@ -206,6 +203,8 @@ function TQG_Manager:RefreshList()
                         AddObjective(name, openingText, closingText,
                                      objectiveOrder, discovered, completed,
                                      optional)
+
+                        if hasBlockingText then break end
                     end
                 else
                     local numObjectives =
