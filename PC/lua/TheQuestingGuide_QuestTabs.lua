@@ -150,7 +150,16 @@ function TQG_Manager:RefreshList()
                 local function AddObjective(name, openingText, closingText,
                                             objectiveOrder, discovered,
                                             completed, optional)
-                    zoneCompleted = zoneCompleted and (completed or optional)
+
+                    if optional then
+                        if completed then
+                            zoneCompleted = completed
+                        elseif objectiveOrder == 1 then
+                            zoneCompleted = zoneCompleted and completed
+                        end
+                    else
+                        zoneCompleted = zoneCompleted and completed
+                    end
 
                     table.insert(objectives, {
                         name = name,

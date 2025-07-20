@@ -73,7 +73,7 @@ EVENT_MANAGER:RegisterForEvent("TheQuestingGuide_GP", EVENT_ADD_ON_LOADED,
                                addonLoaded)
 
 function TQG.ToggleMenu_Gamepad()
-    SCENE_MANAGER:Push("TheQuestingGuideDLC_gp")
+    SCENE_MANAGER:Push("TheQuestingGuideClassic_gp")
 end
 
 ------------------------------------
